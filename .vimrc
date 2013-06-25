@@ -47,8 +47,8 @@ augroup END
 "statusline
 set laststatus=2 
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}[%{&fileencoding}:%Y:#\%03.3b(0x\%02.2B):%1l/%L]
-highlight statusline term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=240
-highlight StatusLineNC term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=236
+highlight statusline term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=245
+highlight StatusLineNC term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=240
 
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
@@ -110,7 +110,8 @@ NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
 "NeoBundle 'cakebaker/scss-syntax.vim'
-
+NeoBundle "nathanaelkane/vim-indent-guides"
+NeoBundle 'majutsushi/tagbar'
 filetype plugin indent on     " Required!
  "
  " Brief help
@@ -342,3 +343,16 @@ set fileformats=unix,dos,mac
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
+
+
+"" Indent
+let s:hooks = neobundle#get_hooks("vim-indent-guides")
+function! s:hooks.on_source(bundle)
+  let g:indent_guides_guide_size = 1
+  IndentGuidesEnable
+endfunction
+
+" tagsジャンプの時に複数ある時は一覧表示                                        
+nnoremap <C-]> g<C-]>
+" tagbar
+nmap <F5> :TagbarToggle<CR>
