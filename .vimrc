@@ -47,14 +47,15 @@ augroup END
 "statusline
 set laststatus=2 
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}[%{&fileencoding}:%Y:#\%03.3b(0x\%02.2B):%1l/%L]
-highlight statusline term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=245
-highlight StatusLineNC term=NONE cterm=NONE guifg=red ctermfg=black ctermbg=240
+highlight statusline term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=245
+highlight StatusLineNC term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=240
 
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
 
 "coffeescript
 let g:quickrun_config = {}
+let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
 
 "zen-coding
@@ -151,12 +152,11 @@ nnoremap <silent> <Space>q :<C-u>Unite file_rec<CR>
 "nnoremap <silent> ,ua :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 
 " ウィンドウを分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+"au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
+"au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 " ウィンドウを縦に分割して開く
-" au FileType unite nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite nnoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-l> unite#do_action('vsplit')
+au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
+au FileType unite inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
 " ESCキーを2回押すと終了する
 au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
 au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
@@ -275,13 +275,6 @@ nnoremap <Space>gb :<C-u>Gblame<Enter>
 " }}}
 
 
-imap <c-o> <END>
-imap <c-a> <HOME>
-imap <c-h> <LEFT>
-imap <c-j> <DOWN>
-imap <c-k> <UP>
-imap <c-l> <Right>
-
 
 "gitv config
 
@@ -356,3 +349,49 @@ endfunction
 nnoremap <C-]> g<C-]>
 " tagbar
 nmap <F5> :TagbarToggle<CR>
+
+"------------------------------------------------
+" neocomplcache settings
+let g:AutoComplPop_NotEnableAtStartup = 1
+let g:NeoComplCache_EnableAtStartup = 1
+let g:NeoComplCache_SmartCase = 1
+let g:NeoComplCache_TagsAutoUpdate = 1
+let g:NeoComplCache_EnableInfo = 1
+let g:NeoComplCache_EnableCamelCaseCompletion = 1
+let g:NeoComplCache_MinSyntaxLength = 3
+let g:NeoComplCache_EnableSkipCompletion = 1
+let g:NeoComplCache_SkipInputTime = '0.5'
+inoremap <expr><Up> pumvisible() ? neocomplcache#close_popup()."\<Up>" : "\<Up>"
+inoremap <expr><Down> pumvisible() ? neocomplcache#close_popup()."\<Down>" : "\<Down>"
+
+"tabで補完候補の選択を行う
+inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
+ 
+" 現在選択している候補を確定します
+inoremap <expr><C-y> neocomplcache#close_popup()
+
+" brackets"
+
+inoremap {} {}<LEFT>
+inoremap [] []<LEFT>
+inoremap () ()<LEFT>
+inoremap "" ""<LEFT>
+inoremap '' ''<LEFT>
+inoremap <> <><LEFT>
+inoremap <1> <% %><LEFT><LEFT><LEFT>
+
+
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
+inoremap <Right> <Nop>
+
+inoremap <c-a> <END>
+inoremap <c-0> <HOME>
+
+

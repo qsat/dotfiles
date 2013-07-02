@@ -9,6 +9,7 @@ autoload -U compinit
 compinit
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+eval "$(rbenv init -)"
 
 #文字コード
 export LANG=ja_JP.UTF-8
