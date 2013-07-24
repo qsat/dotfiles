@@ -1,4 +1,3 @@
-alias lsa="ls -al"
 alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
 alias vi=vim
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
