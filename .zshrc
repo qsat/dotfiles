@@ -110,3 +110,6 @@ unsetopt promptcr
 
 #個別設定を読み込む
 [ -f ~/.zshrc.mine ] && source ~/.zshrc.mine
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

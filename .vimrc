@@ -8,10 +8,8 @@ colorscheme jellybeans
 let g:neocomplcache_enable_at_startup = 1
 let loaded_matchparen = 1
 set autoread
-set fenc=utf-8
-set encoding=utf-8
-"set fileencodings=iso-2022-jp,euc-jp,cp932,ucs-bom,utf-8,default,latin1
-set fileencodings=cp932,iso-2022-jp,utf-8,euc-jp,ucs-bom,default,latin
+"set encoding=utf-8
+"set fileencodings=cp932,iso-2022-jp,utf-8,euc-jp,ucs-bom,default,latin
 set nu
 set ruler
 set cursorline
@@ -26,12 +24,35 @@ set autoindent
 set smartindent
 set noswapfile
 set nobackup
+
+
+
 " 不可視文字
 " set lcs=tab:>.,eol:$,trail:_,extends:\
 " set list
 " highlight SpecialKey cterm=NONE ctermfg=16 guifg=black
 " highlight JpSpace cterm=underline ctermfg=16 guifg=black
 "au BufRead,BufNew * match JpSpace /　/
+
+"------------------------------------------------
+" neocomplcache settings
+"let g:neocomplcache_enable_smart_case = 1
+"let g:neocomplcache_min_syntax_length = 3
+
+let g:AutoComplPop_EnableAtStartup = 0
+let g:NeoComplCache_EnableAtStartup = 1
+let g:NeoComplCache_SmartCase = 1
+let g:NeoComplCache_TagsAutoUpdate = 1
+let g:NeoComplCache_EnableInfo = 1
+let g:NeoComplCache_EnableCamelCaseCompletion = 1
+let g:NeoComplCache_MinSyntaxLength = 3
+let g:NeoComplCache_EnableSkipCompletion = 1
+let g:NeoComplCache_SkipInputTime = '0.5'
+
+"tabで補完候補の選択を行う
+inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
+
 
 source $VIMRUNTIME/macros/matchit.vim
 
@@ -113,6 +134,8 @@ NeoBundle "rhysd/clever-f.vim"
 "NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle "nathanaelkane/vim-indent-guides"
 NeoBundle 'majutsushi/tagbar'
+NeoBundle 'vim-scripts/Visual-Mark'
+
 filetype plugin indent on     " Required!
  "
  " Brief help
@@ -132,7 +155,7 @@ filetype plugin indent on     " Required!
 " 入力モードで開始する
 let g:unite_enable_start_insert=1
 let g:unite_winwidth = 40 
-"let g:unite_winheight = 8
+let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
 " レジスタ一覧
 " 最近使用したファイル一覧
@@ -199,18 +222,19 @@ nmap <Space>e :edit .<CR>
 nmap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
 nmap <Space>V :Vexplore!<CR>gg<CR>
 nmap <Space>, :only<CR>
-nmap <F5> :bn<CR>
-nmap <F6> :bp<CR>
 
 """ヤジルシキー無効
-" noremap <Up> <Nop>
-" noremap <Down> <Nop>
-" noremap <Left> <Nop>
-" noremap <Right> <Nop>
-" inoremap <Up> <Nop>
-" inoremap <Down> <Nop>
-" inoremap <Right> <Nop>
-" inoremap <Left> <Nop>
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+inoremap <UP> <Nop>
+inoremap <Down> <Nop>
+inoremap <RIGHT> <Nop>
+inoremap <LEFT> <Nop>
+
+inoremap <c-a> <END>
+inoremap <c-0> <HOME>
 
 " nnoremap <Left>w :5wincmd <<CR>
 " nnoremap <Right>w :5wincmd ><CR>
@@ -350,48 +374,12 @@ nnoremap <C-]> g<C-]>
 " tagbar
 nmap <F5> :TagbarToggle<CR>
 
-"------------------------------------------------
-" neocomplcache settings
-let g:AutoComplPop_NotEnableAtStartup = 1
-let g:NeoComplCache_EnableAtStartup = 1
-let g:NeoComplCache_SmartCase = 1
-let g:NeoComplCache_TagsAutoUpdate = 1
-let g:NeoComplCache_EnableInfo = 1
-let g:NeoComplCache_EnableCamelCaseCompletion = 1
-let g:NeoComplCache_MinSyntaxLength = 3
-let g:NeoComplCache_EnableSkipCompletion = 1
-let g:NeoComplCache_SkipInputTime = '0.5'
-inoremap <expr><Up> pumvisible() ? neocomplcache#close_popup()."\<Up>" : "\<Up>"
-inoremap <expr><Down> pumvisible() ? neocomplcache#close_popup()."\<Down>" : "\<Down>"
 
-"tabで補完候補の選択を行う
-inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
- 
-" 現在選択している候補を確定します
-inoremap <expr><C-y> neocomplcache#close_popup()
+" visualmark
+" http://nanasi.jp/articles/vim/visualmark_vim.html
+map <unique> <F3> <Plug>Vm_toggle_sign
+map <silent> <unique> mm <Plug>Vm_toggle_sign
 
-" brackets"
-
-inoremap {} {}<LEFT>
-inoremap [] []<LEFT>
-inoremap () ()<LEFT>
-inoremap "" ""<LEFT>
-inoremap '' ''<LEFT>
-inoremap <> <><LEFT>
-inoremap <1> <% %><LEFT><LEFT><LEFT>
-
-
-noremap <Up> <Nop>
-noremap <Down> <Nop>
-noremap <Left> <Nop>
-noremap <Right> <Nop>
-inoremap <Up> <Nop>
-inoremap <Down> <Nop>
-inoremap <Left> <Nop>
-inoremap <Right> <Nop>
-
-inoremap <c-a> <END>
-inoremap <c-0> <HOME>
-
-
+" bracket and tags
+inoremap <>p <?php ?><LEFT><LEFT>
+inoremap <>pe <?php echo ;?><LEFT><LEFT><LEFT>
