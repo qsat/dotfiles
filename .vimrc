@@ -3,10 +3,10 @@ syntax on
 "colorscheme ron
 "colorscheme rootwater
 "colorscheme vividchalk
-"colorscheme hybrid
-colorscheme jellybeans
-let g:neocomplcache_enable_at_startup = 1
+colorscheme hybrid
+"colorscheme jellybeans
 let loaded_matchparen = 1
+let g:neocomplcache_enable_at_startup = 1
 set autoread
 "set encoding=utf-8
 "set fileencodings=cp932,iso-2022-jp,utf-8,euc-jp,ucs-bom,default,latin
@@ -24,8 +24,7 @@ set autoindent
 set smartindent
 set noswapfile
 set nobackup
-
-
+set noequalalways
 
 " 不可視文字
 " set lcs=tab:>.,eol:$,trail:_,extends:\
@@ -38,7 +37,6 @@ set nobackup
 " neocomplcache settings
 "let g:neocomplcache_enable_smart_case = 1
 "let g:neocomplcache_min_syntax_length = 3
-
 let g:AutoComplPop_EnableAtStartup = 0
 let g:NeoComplCache_EnableAtStartup = 1
 let g:NeoComplCache_SmartCase = 1
@@ -57,7 +55,8 @@ inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
 source $VIMRUNTIME/macros/matchit.vim
 
 highlight LineNr ctermfg=236
-highlight CursorLine cterm=none ctermbg=236 guibg=black
+"highlight CursorLine cterm=none ctermbg=236 guibg=black
+highlight CursorLine cterm=none ctermbg=242 guibg=black
 " カレントウィンドウにのみ罫線を引く
 augroup cch
 autocmd! cch
@@ -68,7 +67,7 @@ augroup END
 "statusline
 set laststatus=2 
 set statusline=%F%m%r%h%w\ %{fugitive#statusline()}[%{&fileencoding}:%Y:#\%03.3b(0x\%02.2B):%1l/%L]
-highlight statusline term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=245
+highlight statusline term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=255
 highlight StatusLineNC term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=240
 
 "scss
@@ -80,7 +79,8 @@ let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
 
 "zen-coding
-let g:user_zen_leader_key = '<C-y>'
+"let g:user_zen_leader_key = '<C-y>'
+let g:emmet_html5 = 0
 
 "paste mode
 set pastetoggle=<C-e>
@@ -100,6 +100,7 @@ set nocompatible               " Be iMproved
 
  " Recommended to install
  " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
+ NeoBundle 'Shougo/vimshell'
  NeoBundle 'Shougo/vimproc'
 
  " My Bundles here:
@@ -124,7 +125,7 @@ NeoBundle 'tpope/vim-vividchalk'
 NeoBundle 'Gist.vim'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'http://github.com/kchmck/vim-coffee-script'
-NeoBundle 'https://github.com/mattn/zencoding-vim'
+NeoBundle 'https://github.com/mattn/emmet-vim.git'
 NeoBundle 'wavded/vim-stylus'
 NeoBundle 'teramako/jscomplete-vim'
 NeoBundle 'w0ng/vim-hybrid'
@@ -132,9 +133,10 @@ NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
 "NeoBundle 'cakebaker/scss-syntax.vim'
-NeoBundle "nathanaelkane/vim-indent-guides"
+"NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'majutsushi/tagbar'
-NeoBundle 'vim-scripts/Visual-Mark'
+"NeoBundle 'vim-scripts/Visual-Mark'
+NeoBundle 'terryma/vim-multiple-cursors'
 
 filetype plugin indent on     " Required!
  "
@@ -159,7 +161,11 @@ let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
 " レジスタ一覧
 " 最近使用したファイル一覧
-nnoremap <silent> <Space>m :<C-u>Unite file_mru<CR>
+nnoremap <silent> <Space>m :<C-u>Unite file_mru bookmark<CR>
+nnoremap <silent> vs :<C-u>VimShell<CR>
+nnoremap <silent> vp :<C-u>VimShellPop<CR>
+nnoremap <silent> <Space>h :<C-u>Unite vimshell/history<CR>
+nnoremap <silent> <Space>n :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>r :<C-u>Unite history/yank<CR>
 nnoremap <silent> <Space>g :<C-u>Unite grep<CR>
 nnoremap <silent> <Space>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
@@ -282,12 +288,6 @@ function MyTabLabel(n)
   return fnamemodify(label, ":t") 
 endfunction
 
-nnoremap <S-Tab> gT
-nnoremap <Tab><Tab> gt
-for i in range(1, 9)
-  execute 'nnoremap <Tab>' . i . ' ' . i . 'gt'
-endfor
-
 " for Fugitive {{{
 nnoremap <Space>gd :<C-u>Gdiff<Enter>
 nnoremap <Space>gs :<C-u>Gstatus<Enter>
@@ -363,11 +363,11 @@ endif
 
 
 "" Indent
-let s:hooks = neobundle#get_hooks("vim-indent-guides")
-function! s:hooks.on_source(bundle)
-  let g:indent_guides_guide_size = 1
-  IndentGuidesEnable
-endfunction
+"let s:hooks = neobundle#get_hooks("vim-indent-guides")
+"function! s:hooks.on_source(bundle)
+"  let g:indent_guides_guide_size = 1
+"  IndentGuidesEnable
+"endfunction
 
 " tagsジャンプの時に複数ある時は一覧表示                                        
 nnoremap <C-]> g<C-]>
@@ -383,3 +383,6 @@ map <silent> <unique> mm <Plug>Vm_toggle_sign
 " bracket and tags
 inoremap <>p <?php ?><LEFT><LEFT>
 inoremap <>pe <?php echo ;?><LEFT><LEFT><LEFT>
+
+" 縦分割版gf
+nnoremap gs :vertical wincmd f<CR>
