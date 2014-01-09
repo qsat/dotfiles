@@ -8,6 +8,7 @@ autoload -U compinit
 compinit
 
 export PATH=$HOME/.nodebrew/current/bin:$PATH
+export PATH=$HOME/.nodebrew/:$PATH
 eval "$(rbenv init -)"
 
 #文字コード
@@ -85,15 +86,6 @@ alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -al'
 
-#w3mでALC検索
-function alc() {
-  if [ $# != 0 ]; then
-    w3m "http://eow.alc.co.jp/$*/UTF-8/?ref=sa"
-  else
-    w3m "http://www.alc.co.jp/"
-  fi
-}
-
 #その他
 #キーバインド
 bindkey -e
@@ -112,3 +104,5 @@ unsetopt promptcr
 
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
+
+export PATH="$PATH:/Applications/android-sdk-macosx/tools"

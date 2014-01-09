@@ -1,18 +1,18 @@
+set background=dark
 syntax on
 
-"colorscheme ron
-"colorscheme rootwater
-"colorscheme vividchalk
-colorscheme hybrid
+colorscheme iceberg
+"colorscheme hybrid
 "colorscheme jellybeans
+
 let loaded_matchparen = 1
-let g:neocomplcache_enable_at_startup = 1
 set autoread
 "set encoding=utf-8
 "set fileencodings=cp932,iso-2022-jp,utf-8,euc-jp,ucs-bom,default,latin
 set nu
 set ruler
 set cursorline
+set cursorcolumn
 set expandtab
 set shiftwidth=2
 "set nowrap
@@ -31,32 +31,33 @@ set noequalalways
 " set list
 " highlight SpecialKey cterm=NONE ctermfg=16 guifg=black
 " highlight JpSpace cterm=underline ctermfg=16 guifg=black
-"au BufRead,BufNew * match JpSpace /　/
+" au BufRead,BufNew * match JpSpace /　/
 
 "------------------------------------------------
-" neocomplcache settings
-"let g:neocomplcache_enable_smart_case = 1
-"let g:neocomplcache_min_syntax_length = 3
-let g:AutoComplPop_EnableAtStartup = 0
-let g:NeoComplCache_EnableAtStartup = 1
-let g:NeoComplCache_SmartCase = 1
-let g:NeoComplCache_TagsAutoUpdate = 1
-let g:NeoComplCache_EnableInfo = 1
-let g:NeoComplCache_EnableCamelCaseCompletion = 1
-let g:NeoComplCache_MinSyntaxLength = 3
-let g:NeoComplCache_EnableSkipCompletion = 1
-let g:NeoComplCache_SkipInputTime = '0.5'
+" neocompleteを使う
 
-"tabで補完候補の選択を行う
-inoremap <expr><TAB> pumvisible() ? "\<Down>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
+" neocomplete用設定
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_ignore_case = 1
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete_auto_completion_start_length = 3
+
+if !exists('g:neocomplete#keyword_patterns')
+  let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 
 source $VIMRUNTIME/macros/matchit.vim
 
-highlight LineNr ctermfg=236
-"highlight CursorLine cterm=none ctermbg=236 guibg=black
-highlight CursorLine cterm=none ctermbg=242 guibg=black
+highlight LineNr ctermfg=244
+highlight CursorLine cterm=none ctermbg=238 guibg=black
+highlight CursorColumn cterm=none ctermbg=238 guibg=black
+highlight Visual cterm=none ctermbg=240 guibg=black
+
 " カレントウィンドウにのみ罫線を引く
 augroup cch
 autocmd! cch
@@ -107,7 +108,7 @@ set nocompatible               " Be iMproved
  "
  " Note: You don't set neobundle setting in .gvimrc!
 NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Sixeight/unite-grep'
@@ -116,7 +117,6 @@ NeoBundle "h1mesuke/unite-outline"
 NeoBundle 'violetyk/cake.vim'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
-"NeoBundle 'thinca/vim-localrc'
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'
@@ -127,16 +127,13 @@ NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'http://github.com/kchmck/vim-coffee-script'
 NeoBundle 'https://github.com/mattn/emmet-vim.git'
 NeoBundle 'wavded/vim-stylus'
-NeoBundle 'teramako/jscomplete-vim'
 NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
-"NeoBundle 'cakebaker/scss-syntax.vim'
-"NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'majutsushi/tagbar'
-"NeoBundle 'vim-scripts/Visual-Mark'
 NeoBundle 'terryma/vim-multiple-cursors'
+NeoBundle 'digitaltoad/vim-jade'
 
 filetype plugin indent on     " Required!
  "
@@ -238,16 +235,10 @@ inoremap <UP> <Nop>
 inoremap <Down> <Nop>
 inoremap <RIGHT> <Nop>
 inoremap <LEFT> <Nop>
-
 inoremap <c-a> <END>
 inoremap <c-0> <HOME>
 
-" nnoremap <Left>w :5wincmd <<CR>
-" nnoremap <Right>w :5wincmd ><CR>
-" nnoremap <Up>w :5wincmd -<CR>
-" nnoremap <Down>w :5wincmd +<CR>
 let g:vimfiler_as_default_explorer = 1
-
 
 set ambiwidth=double
 
@@ -299,6 +290,9 @@ nnoremap <Space>gb :<C-u>Gblame<Enter>
 " }}}
 
 
+nnoremap <Space>c :<C-u>setlocal cursorcolumn!<CR>
+nnoremap <Space>w :<C-u>setlocal wrap!<CR>
+
 
 "gitv config
 
@@ -345,6 +339,7 @@ if has('iconv')
   unlet s:enc_euc
   unlet s:enc_jis
 endif
+
 " 日本語を含まない場合は fileencoding に encoding を使うようにする
 if has('autocmd')
   function! AU_ReCheck_FENC()
@@ -356,33 +351,22 @@ if has('autocmd')
 endif
 " 改行コードの自動認識
 set fileformats=unix,dos,mac
+
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
-
-
-"" Indent
-"let s:hooks = neobundle#get_hooks("vim-indent-guides")
-"function! s:hooks.on_source(bundle)
-"  let g:indent_guides_guide_size = 1
-"  IndentGuidesEnable
-"endfunction
 
 " tagsジャンプの時に複数ある時は一覧表示                                        
 nnoremap <C-]> g<C-]>
 " tagbar
 nmap <F5> :TagbarToggle<CR>
 
-
-" visualmark
-" http://nanasi.jp/articles/vim/visualmark_vim.html
-map <unique> <F3> <Plug>Vm_toggle_sign
-map <silent> <unique> mm <Plug>Vm_toggle_sign
-
-" bracket and tags
-inoremap <>p <?php ?><LEFT><LEFT>
-inoremap <>pe <?php echo ;?><LEFT><LEFT><LEFT>
-
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
+
+"Jade
+autocmd BufNewFile,BufRead *.jade  setf jade
+autocmd BufNewFile,BufRead *.jade  set tabstop=2 shiftwidth=2 expandtab
+let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c &o < %s']}
+
