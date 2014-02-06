@@ -12,7 +12,7 @@ set autoread
 set nu
 set ruler
 set cursorline
-set cursorcolumn
+"set cursorcolumn
 set expandtab
 set shiftwidth=2
 "set nowrap
@@ -53,7 +53,9 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 source $VIMRUNTIME/macros/matchit.vim
 
-highlight LineNr ctermfg=244
+highlight LineNr ctermfg=238 ctermbg=none
+"highlight CursorLine cterm=underline ctermbg=none guibg=black
+"highlight CursorColumn cterm=underline ctermbg=237 guibg=black
 highlight CursorLine cterm=none ctermbg=238 guibg=black
 highlight CursorColumn cterm=none ctermbg=238 guibg=black
 highlight Visual cterm=none ctermbg=240 guibg=black
@@ -368,5 +370,5 @@ nnoremap gs :vertical wincmd f<CR>
 "Jade
 autocmd BufNewFile,BufRead *.jade  setf jade
 autocmd BufNewFile,BufRead *.jade  set tabstop=2 shiftwidth=2 expandtab
-let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c &o < %s']}
+let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 
