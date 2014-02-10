@@ -7,9 +7,18 @@ alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 autoload -U compinit
 compinit
 
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-export PATH=$HOME/.nodebrew/:$PATH
-eval "$(rbenv init -)"
+# ------------------------------------------------------------------------
+# anyenv
+# ------------------------------------------------------------------------
+if [ -d ${HOME}/.anyenv ] ; then
+    export PATH="$HOME/.anyenv/bin:$PATH"
+    eval "$(anyenv init -)"
+    for D in `find $HOME/.anyenv/envs -type d -d 1`
+    do
+        export PATH="$D/shims:$PATH"
+    done
+
+fi
 
 #文字コード
 export LANG=ja_JP.UTF-8

@@ -7,6 +7,7 @@
 ##### Gitで管理するファイルリスト #####
 !/.zshrc
 !/.vimrc
+!/.gvimrc
 #!/.vim
 !/.gitignore
 !/.gitconfig
