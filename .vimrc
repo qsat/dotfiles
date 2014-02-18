@@ -76,6 +76,9 @@ highlight StatusLineNC term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=24
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
 
+"actionscript
+autocmd! BufNewFile,BufRead *.as setlocal filetype=actionscript
+
 "coffeescript
 let g:quickrun_config = {}
 let g:quickrun_config={'*': {'split': 'vertical'}}
@@ -136,6 +139,16 @@ NeoBundle "rhysd/clever-f.vim"
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'git://github.com/vim-scripts/actionscript.vim--Leider.git'
+
+if has('python') && executable('npm')
+  NeoBundleLazy 'marijnh/tern_for_vim', {
+        \ 'build' : 'npm install',
+        \ 'autoload' : {
+        \   'functions': ['tern#Complete', 'tern#Enable'],
+        \   'filetypes' : 'javascript'
+        \ }}
+endif
 
 filetype plugin indent on     " Required!
  "
