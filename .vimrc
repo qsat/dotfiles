@@ -26,6 +26,8 @@ set noswapfile
 set nobackup
 set noequalalways
 
+set clipboard=unnamed
+
 " 不可視文字
 " set lcs=tab:>.,eol:$,trail:_,extends:\
 " set list
@@ -114,10 +116,12 @@ set nocompatible               " Be iMproved
  " Note: You don't set neobundle setting in .gvimrc!
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplete'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Sixeight/unite-grep'
-NeoBundle "h1mesuke/unite-outline"
+NeoBundle "Shougo/unite-outline"
+NeoBundle 'ActionScript-3-Omnicomplete'
 "NeoBundle 'ujihisa/unite-locate'
 NeoBundle 'violetyk/cake.vim'
 NeoBundle 'thinca/vim-quickrun'
