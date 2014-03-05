@@ -7,8 +7,6 @@ colorscheme iceberg
 
 let loaded_matchparen = 1
 set autoread
-"set encoding=utf-8
-"set fileencodings=cp932,iso-2022-jp,utf-8,euc-jp,ucs-bom,default,latin
 set nu
 set ruler
 set cursorline
@@ -27,13 +25,6 @@ set nobackup
 set noequalalways
 
 set clipboard=unnamed
-
-" 不可視文字
-" set lcs=tab:>.,eol:$,trail:_,extends:\
-" set list
-" highlight SpecialKey cterm=NONE ctermfg=16 guifg=black
-" highlight JpSpace cterm=underline ctermfg=16 guifg=black
-" au BufRead,BufNew * match JpSpace /　/
 
 "------------------------------------------------
 " neocompleteを使う
@@ -56,8 +47,6 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 source $VIMRUNTIME/macros/matchit.vim
 
 highlight LineNr ctermfg=238 ctermbg=none
-"highlight CursorLine cterm=underline ctermbg=none guibg=black
-"highlight CursorColumn cterm=underline ctermbg=237 guibg=black
 highlight CursorLine cterm=none ctermbg=238 guibg=black
 highlight CursorColumn cterm=none ctermbg=238 guibg=black
 highlight Visual cterm=none ctermbg=240 guibg=black
@@ -119,11 +108,11 @@ NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Sixeight/unite-grep'
 NeoBundle "Shougo/unite-outline"
 NeoBundle 'ActionScript-3-Omnicomplete'
-"NeoBundle 'ujihisa/unite-locate'
+NeoBundle 'ujihisa/unite-locate'
 NeoBundle 'violetyk/cake.vim'
+NeoBundle 'oppara/vim-unite-cake'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'tpope/vim-rails'
@@ -131,6 +120,7 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'tpope/vim-vividchalk'
+NeoBundle 'tacroe/unite-mark'
 NeoBundle 'Gist.vim'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'http://github.com/kchmck/vim-coffee-script'
@@ -144,6 +134,7 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'git://github.com/vim-scripts/actionscript.vim--Leider.git'
+
 
 if has('python') && executable('npm')
   NeoBundleLazy 'marijnh/tern_for_vim', {
@@ -177,7 +168,7 @@ let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
 " レジスタ一覧
 " 最近使用したファイル一覧
-nnoremap <silent> <Space>m :<C-u>Unite file_mru bookmark<CR>
+nnoremap <silent> <Space>m :<C-u>Unite file_mru directory_mru bookmark<CR>
 nnoremap <silent> vs :<C-u>VimShell<CR>
 nnoremap <silent> vp :<C-u>VimShellPop<CR>
 nnoremap <silent> <Space>h :<C-u>Unite vimshell/history<CR>
@@ -189,16 +180,15 @@ nnoremap <silent> <Space>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
 nnoremap <silent> <Space>l :<C-u>Unite line<CR>
 nnoremap <silent> <Space>L :<C-u>UniteWithCursorWord line<CR>
 " outline
-nnoremap <silent> <Space>o :<C-u>Unite -no-quit -vertical outline<CR>
-" 常用セット
+nnoremap <silent> <Space>o :<C-u>Unite -no-quit -keep-focus -vertical outline<CR>
+
+nnoremap <silent> <Space>um :<C-u>Unite mark<CR>
+nnoremap <silent> <Space>ul :<C-u>Unite locate<CR>
+nnoremap <silent> <Space>uu :Unite -direction=botright -default-action=vimfiler directory_mru<CR>
+
 nnoremap <silent> <Space>b :<C-u>Unite buffer<CR>
 nnoremap <silent> <Space>q :<C-u>Unite file_rec<CR>
-" 全部乗せ
-"nnoremap <silent> ,ua :<C-u>UniteWithBufferDir -buffer-name=files buffer file_mru bookmark file<CR>
 
-" ウィンドウを分割して開く
-"au FileType unite nnoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
-"au FileType unite inoremap <silent> <buffer> <expr> <C-j> unite#do_action('split')
 " ウィンドウを縦に分割して開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
 au FileType unite inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
@@ -240,9 +230,8 @@ endfunction
 
 """ buffer 関連
 "nmap <Space>b :ls<CR>:buffer 
-nmap <Space>e :edit .<CR>
+nmap <Space>e :VimFilerBufferDir -project<CR>
 nmap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
-nmap <Space>V :Vexplore!<CR>gg<CR>
 nmap <Space>, :only<CR>
 
 """ヤジルシキー無効
@@ -317,57 +306,6 @@ nnoremap <Space>w :<C-u>setlocal wrap!<CR>
 
 autocmd FileType git :setlocal foldlevel=99
 
-" 文字コードの自動認識
-if &encoding !=# 'utf-8'
-  set encoding=japan
-  set fileencoding=japan
-endif
-if has('iconv')
-  let s:enc_euc = 'euc-jp'
-  let s:enc_jis = 'iso-2022-jp'
-  " iconvがeucJP-msに対応しているかをチェック
-  if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-    let s:enc_euc = 'eucjp-ms'
-    let s:enc_jis = 'iso-2022-jp-3'
-  " iconvがJISX0213に対応しているかをチェック
-  elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-    let s:enc_euc = 'euc-jisx0213'
-    let s:enc_jis = 'iso-2022-jp-3'
-  endif
-  " fileencodingsを構築
-  if &encoding ==# 'utf-8'
-    let s:fileencodings_default = &fileencodings
-    let &fileencodings = s:enc_jis .','. s:enc_euc .',cp932'
-    let &fileencodings = &fileencodings .','. s:fileencodings_default
-    unlet s:fileencodings_default
-  else
-    let &fileencodings = &fileencodings .','. s:enc_jis
-    set fileencodings+=utf-8,ucs-2le,ucs-2
-    if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-      set fileencodings+=cp932
-      set fileencodings-=euc-jp
-      set fileencodings-=euc-jisx0213
-      set fileencodings-=eucjp-ms
-      let &encoding = s:enc_euc
-      let &fileencoding = s:enc_euc
-    else
-      let &fileencodings = &fileencodings .','. s:enc_euc
-    endif
-  endif
-  " 定数を処分
-  unlet s:enc_euc
-  unlet s:enc_jis
-endif
-
-" 日本語を含まない場合は fileencoding に encoding を使うようにする
-if has('autocmd')
-  function! AU_ReCheck_FENC()
-    if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
-      let &fileencoding=&encoding
-    endif
-  endfunction
-  autocmd BufReadPost * call AU_ReCheck_FENC()
-endif
 " 改行コードの自動認識
 set fileformats=unix,dos,mac
 
@@ -388,4 +326,3 @@ nnoremap gs :vertical wincmd f<CR>
 autocmd BufNewFile,BufRead *.jade  setf jade
 autocmd BufNewFile,BufRead *.jade  set tabstop=2 shiftwidth=2 expandtab
 let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
-
