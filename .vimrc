@@ -1,6 +1,7 @@
 set background=dark
 syntax on
 
+autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
 colorscheme iceberg
 "colorscheme hybrid
 "colorscheme jellybeans
@@ -134,6 +135,7 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'git://github.com/vim-scripts/actionscript.vim--Leider.git'
+NeoBundle 'glidenote/memolist.vim'
 
 
 if has('python') && executable('npm')
@@ -166,11 +168,13 @@ let g:unite_enable_start_insert=1
 let g:unite_winwidth = 40 
 let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
+
+""" vimshell
+let g:vimshell_popup_command = 'vsplit'
 " レジスタ一覧
 " 最近使用したファイル一覧
 nnoremap <silent> <Space>m :<C-u>Unite file_mru directory_mru bookmark<CR>
-nnoremap <silent> vs :<C-u>VimShell<CR>
-nnoremap <silent> vp :<C-u>VimShellPop<CR>
+nnoremap <silent> vs :<C-u>VimShellPop<CR>
 nnoremap <silent> <Space>h :<C-u>Unite vimshell/history<CR>
 nnoremap <silent> <Space>n :<C-u>Unite bookmark<CR>
 nnoremap <silent> <Space>r :<C-u>Unite history/yank<CR>
@@ -326,3 +330,13 @@ nnoremap gs :vertical wincmd f<CR>
 autocmd BufNewFile,BufRead *.jade  setf jade
 autocmd BufNewFile,BufRead *.jade  set tabstop=2 shiftwidth=2 expandtab
 let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
+
+"MemoList
+nnoremap <Leader>mn  :MemoNew<CR>
+nnoremap <Leader>ml  :MemoList<CR>
+nnoremap <Leader>mg  :MemoGrep<CR>
+
+let g:memolist_path = "~/Dropbox/Memo/"
+
+
+
