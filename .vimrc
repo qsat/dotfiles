@@ -1,3 +1,4 @@
+
 set background=dark
 syntax on
 
@@ -116,11 +117,14 @@ NeoBundle 'violetyk/cake.vim'
 NeoBundle 'oppara/vim-unite-cake'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'thinca/vim-singleton'
+
+call singleton#enable()
+
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv'
-NeoBundle 'tpope/vim-vividchalk'
 NeoBundle 'tacroe/unite-mark'
 NeoBundle 'Gist.vim'
 NeoBundle 'jelera/vim-javascript-syntax'
@@ -131,6 +135,7 @@ NeoBundle 'w0ng/vim-hybrid'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
+NeoBundle 'vim-scripts/vim-auto-save'
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'digitaltoad/vim-jade'
@@ -338,5 +343,5 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 
 let g:memolist_path = "~/Dropbox/Memo/"
 
-
+let g:auto_save = 1
 
