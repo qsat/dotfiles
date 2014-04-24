@@ -1,11 +1,8 @@
-
 set background=dark
 syntax on
 
 autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
 colorscheme iceberg
-"colorscheme hybrid
-"colorscheme jellybeans
 
 let loaded_matchparen = 1
 set autoread
@@ -27,7 +24,6 @@ set nobackup
 set noequalalways
 
 set clipboard=unnamed
-
 "------------------------------------------------
 " neocompleteを使う
 
@@ -37,14 +33,8 @@ let g:neocomplete#enable_ignore_case = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete_auto_completion_start_length = 3
 
-if !exists('g:neocomplete#keyword_patterns')
-  let g:neocomplete#keyword_patterns = {}
-endif
-let g:neocomplete#keyword_patterns._ = '\h\w*'
-
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
 
 source $VIMRUNTIME/macros/matchit.vim
 
@@ -111,16 +101,11 @@ NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle "Shougo/unite-outline"
-NeoBundle 'ActionScript-3-Omnicomplete'
 NeoBundle 'ujihisa/unite-locate'
 NeoBundle 'violetyk/cake.vim'
 NeoBundle 'oppara/vim-unite-cake'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'thinca/vim-singleton'
-
-call singleton#enable()
-
 NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'
@@ -131,26 +116,12 @@ NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'http://github.com/kchmck/vim-coffee-script'
 NeoBundle 'https://github.com/mattn/emmet-vim.git'
 NeoBundle 'wavded/vim-stylus'
-NeoBundle 'w0ng/vim-hybrid'
-NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
-NeoBundle 'vim-scripts/vim-auto-save'
 NeoBundle 'majutsushi/tagbar'
-NeoBundle 'terryma/vim-multiple-cursors'
 NeoBundle 'digitaltoad/vim-jade'
-NeoBundle 'git://github.com/vim-scripts/actionscript.vim--Leider.git'
 NeoBundle 'glidenote/memolist.vim'
-
-
-if has('python') && executable('npm')
-  NeoBundleLazy 'marijnh/tern_for_vim', {
-        \ 'build' : 'npm install',
-        \ 'autoload' : {
-        \   'functions': ['tern#Complete', 'tern#Enable'],
-        \   'filetypes' : 'javascript'
-        \ }}
-endif
+NeoBundle 'itchyny/lightline.vim'
 
 filetype plugin indent on     " Required!
  "
@@ -207,40 +178,30 @@ au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
 
 "挿入モード時、ステータスラインの色を変更
 """"""""""""""""""""""""""""""
-let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=black ctermbg=136 cterm=none'
-
-if has('syntax')
-  augroup InsertHook
-    autocmd!
-    autocmd InsertEnter * call s:StatusLine('Enter')
-    autocmd InsertLeave * call s:StatusLine('Leave')
-  augroup END
-endif
-
-let s:slhlcmd = ''
-function! s:StatusLine(mode)
-  if a:mode == 'Enter'
-    silent! let s:slhlcmd = 'highlight ' . s:GetHighlight('StatusLine')
-    silent exec g:hi_insert
-  else
-    highlight clear StatusLine
-    silent exec s:slhlcmd
-  endif
-endfunction
-
-function! s:GetHighlight(hi)
-  redir => hl
-  exec 'highlight '.a:hi
-  redir END
-  let hl = substitute(hl, '[\r\n]', '', 'g')
-  let hl = substitute(hl, 'xxx', '', '')
-  return hl
-endfunction
+let g:unite_force_overwrite_statusline = 0
+let g:vimfiler_force_overwrite_statusline = 0
+let g:vimshell_force_overwrite_statusline = 0
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component': {
+      \   'readonly': '%{&filetype=="help"?"":&readonly?"⭤":""}',
+      \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
+      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
+      \ },
+      \ 'component_visible_condition': {
+      \   'readonly': '(&filetype!="help"&& &readonly)',
+      \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
+      \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
+      \ },
+      \ }
 
 """ buffer 関連
 "nmap <Space>b :ls<CR>:buffer 
 nmap <Space>e :VimFilerBufferDir -project<CR>
-nmap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:buffer
+nmap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:VimFilerBufferDir -projec
 nmap <Space>, :only<CR>
 
 """ヤジルシキー無効
@@ -306,10 +267,8 @@ nnoremap <Space>gC :<C-u>Git commit --amend<Enter>
 nnoremap <Space>gb :<C-u>Gblame<Enter>
 " }}}
 
-
 nnoremap <Space>c :<C-u>setlocal cursorcolumn!<CR>
 nnoremap <Space>w :<C-u>setlocal wrap!<CR>
-
 
 "gitv config
 
@@ -342,6 +301,3 @@ nnoremap <Leader>ml  :MemoList<CR>
 nnoremap <Leader>mg  :MemoGrep<CR>
 
 let g:memolist_path = "~/Dropbox/Memo/"
-
-let g:auto_save = 1
-
