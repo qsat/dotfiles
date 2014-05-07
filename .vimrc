@@ -5,6 +5,7 @@ autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
 colorscheme iceberg
 
 let loaded_matchparen = 1
+set noundofile
 set autoread
 set nu
 set ruler
@@ -26,6 +27,7 @@ set noequalalways
 set clipboard=unnamed
 "------------------------------------------------
 " neocompleteを使う
+let g:EclimCompletionMethod = 'omnifunc'
 
 " neocomplete用設定
 let g:neocomplete#enable_at_startup = 1
@@ -50,11 +52,6 @@ autocmd WinLeave * set nocursorline
 autocmd WinEnter,BufRead * set cursorline
 augroup END
 
-"statusline
-set laststatus=2 
-set statusline=%F%m%r%h%w\ %{fugitive#statusline()}[%{&fileencoding}:%Y:#\%03.3b(0x\%02.2B):%1l/%L]
-highlight statusline term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=255
-highlight StatusLineNC term=NONE cterm=NONE guifg=black ctermfg=black ctermbg=240
 
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
@@ -301,3 +298,4 @@ nnoremap <Leader>ml  :MemoList<CR>
 nnoremap <Leader>mg  :MemoGrep<CR>
 
 let g:memolist_path = "~/Dropbox/Memo/"
+

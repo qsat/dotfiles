@@ -116,3 +116,4 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 export PATH="$PATH:/Applications/android-sdk-macosx/tools"
 export PATH="$PATH:/Applications/Adobe\ Flash\ Builder\ 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin"
+export DOCKER_HOST="localhost"
