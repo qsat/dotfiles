@@ -2,7 +2,6 @@ set background=dark
 syntax on
 
 autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
-colorscheme iceberg
 
 let loaded_matchparen = 1
 set noundofile
@@ -119,6 +118,7 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'cocopon/iceberg.vim'
 
 filetype plugin indent on     " Required!
  "
@@ -299,3 +299,4 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 
 let g:memolist_path = "~/Dropbox/Memo/"
 
+colorscheme iceberg

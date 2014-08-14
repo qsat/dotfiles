@@ -1,5 +1,5 @@
 alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
-alias vi=vim
+#alias vi=vim
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
@@ -29,7 +29,7 @@ colors
 
 PROMPT="
  %{${fg[yellow]}%}%~%{${reset_color}%} 
-[%n]$ "
+%n$ "
 
 PROMPT2='[%n]> ' 
 
