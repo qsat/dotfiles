@@ -197,8 +197,11 @@ let g:lightline = {
 
 """ buffer 関連
 "nmap <Space>b :ls<CR>:buffer 
+noremap <S-TAB> <C-w>W
+noremap <TAB> <C-w>w
+
 nmap <Space>e :VimFilerBufferDir -project<CR>
-nmap <Space>v :vsplit<CR><C-w><C-w>:ls<CR>:VimFilerBufferDir -projec
+nmap <Space>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
 nmap <Space>, :only<CR>
 
 """ヤジルシキー無効
