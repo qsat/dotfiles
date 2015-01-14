@@ -5,6 +5,8 @@ autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
 
 let loaded_matchparen = 1
 set noundofile
+set breakindent
+set backspace=indent,eol,start
 set autoread
 set nu
 set ruler
@@ -62,13 +64,14 @@ autocmd! BufNewFile,BufRead *.as setlocal filetype=actionscript
 let g:quickrun_config = {}
 let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
+let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 
 "zen-coding
 "let g:user_zen_leader_key = '<C-y>'
 let g:emmet_html5 = 0
 
 "paste mode
-set pastetoggle=<C-e>
+set pastetoggle=<C-p>
 
 "neobundle
 set nocompatible               " Be iMproved
@@ -78,7 +81,7 @@ set nocompatible               " Be iMproved
    set runtimepath+=~/.vim/bundle/neobundle.vim/
  endif
 
- call neobundle#rc(expand('~/.vim/bundle/'))
+ call neobundle#begin(expand('~/.vim/bundle/'))
 
  " Let NeoBundle manage NeoBundle
  "NeoBundle 'Shougo/neobundle.vim'
@@ -120,20 +123,12 @@ NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
 
-filetype plugin indent on     " Required!
- "
- " Brief help
- " :NeoBundleList          - list configured bundles
- " :NeoBundleInstall(!)    - install(update) bundles
- " :NeoBundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+call neobundle#end()
 
- " Installation check.
- if neobundle#exists_not_installed_bundles()
-   echomsg 'Not installed bundles : ' .
-         \ string(neobundle#get_not_installed_bundle_names())
-   echomsg 'Please execute ":NeoBundleInstall" command.'
-   "finish
- endif
+filetype plugin indent on     " Required!
+
+" Installation check.
+NeoBundleCheck
 
 """ unite.vim
 " 入力モードで開始する
@@ -157,7 +152,8 @@ nnoremap <silent> <Space>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
 nnoremap <silent> <Space>l :<C-u>Unite line<CR>
 nnoremap <silent> <Space>L :<C-u>UniteWithCursorWord line<CR>
 " outline
-nnoremap <silent> <Space>o :<C-u>Unite -no-quit -keep-focus -vertical outline<CR>
+" nnoremap <silent> <Space>o :<C-u>Unite -no-quit -keep-focus outline<CR>
+nnoremap <silent> <Space>o :<C-u>Unite -no-quit outline<CR>
 
 nnoremap <silent> <Space>um :<C-u>Unite mark<CR>
 nnoremap <silent> <Space>ul :<C-u>Unite locate<CR>
@@ -179,12 +175,17 @@ let g:unite_force_overwrite_statusline = 0
 let g:vimfiler_force_overwrite_statusline = 0
 let g:vimshell_force_overwrite_statusline = 0
 let g:lightline = {
+      \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
+      \             [ 'fugitive', 'readonly', 'filename', 'modified'] ]
+      \ },
+      \ 'inactive': {
+      \   'left': [['fpath']]
       \ },
       \ 'component': {
-      \   'readonly': '%{&filetype=="help"?"":&readonly?"⭤":""}',
+      \   'fpath': '%F',
+      \   'readonly': '%{&filetype=="help"?"":&readonly?"":""}',
       \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
       \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():""}'
       \ },
@@ -205,6 +206,12 @@ nmap <Space>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -tog
 nmap <Space>, :only<CR>
 
 """ヤジルシキー無効
+noremap j gj
+noremap k gk
+noremap $ g$
+noremap 0 g0
+noremap A g$a
+
 noremap <Up> <Nop>
 noremap <Down> <Nop>
 noremap <Left> <Nop>
@@ -219,43 +226,6 @@ inoremap <c-0> <HOME>
 let g:vimfiler_as_default_explorer = 1
 
 set ambiwidth=double
-
-set tabline=%!MyTabLine()
-
-function MyTabLine()
-  let s = ''
-  for i in range(tabpagenr('$'))
-    " select the highlighting
-    if i + 1 == tabpagenr()
-      let s .= '%#TabLineSel#'
-    else
-      let s .= '%#TabLine#'
-    endif
-
-    " set the tab page number (for mouse clicks)
-    let s .= '%' . (i + 1) . 'T' 
-
-    " the label is made by MyTabLabel()
-    let s .= ' %{MyTabLabel(' . (i + 1) . ')} '
-  endfor
-
-  " after the last tab fill with TabLineFill and reset tab page nr
-  let s .= '%#TabLineFill#%T'
-
-  " right-align the label to close the current tab page
-  if tabpagenr('$') > 1 
-    let s .= '%=%#TabLine#%999Xclose'
-  endif
-
-  return s
-endfunction
-
-function MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  let label =  bufname(buflist[winnr - 1]) 
-  return fnamemodify(label, ":t") 
-endfunction
 
 " for Fugitive {{{
 nnoremap <Space>gd :<C-u>Gdiff<Enter>
@@ -292,8 +262,6 @@ nnoremap gs :vertical wincmd f<CR>
 
 "Jade
 autocmd BufNewFile,BufRead *.jade  setf jade
-autocmd BufNewFile,BufRead *.jade  set tabstop=2 shiftwidth=2 expandtab
-let g:quickrun_config['jade']={'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 
 "MemoList
 nnoremap <Leader>mn  :MemoNew<CR>

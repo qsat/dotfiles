@@ -1,7 +1,9 @@
-alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
+#alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
 #alias vi=vim
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
+
+export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
 
 #補間
 autoload -U compinit
