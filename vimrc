@@ -71,7 +71,7 @@ let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c
 let g:emmet_html5 = 0
 
 "paste mode
-set pastetoggle=<C-p>
+set pastetoggle=<C-b>
 
 "neobundle
 set nocompatible               " Be iMproved
@@ -118,10 +118,12 @@ NeoBundle 'wavded/vim-stylus'
 NeoBundle "sakuraiyuta/commentout.vim"
 NeoBundle "rhysd/clever-f.vim"
 NeoBundle 'majutsushi/tagbar'
+NeoBundle 'lukaszkorecki/CoffeeTags'
 NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
+NeoBundle 'kakkyz81/evervim'
 
 call neobundle#end()
 
@@ -201,16 +203,16 @@ let g:lightline = {
 noremap <S-TAB> <C-w>W
 noremap <TAB> <C-w>w
 
-nmap <Space>e :VimFilerBufferDir -project<CR>
+nmap <Space>p :VimFilerBufferDir -project<CR>
+nmap <Space>e :VimFilerBufferDir<CR>
 nmap <Space>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
 nmap <Space>, :only<CR>
+nmap <Space>. :tabc<CR>
 
 """ヤジルシキー無効
 noremap j gj
 noremap k gk
-noremap $ g$
 noremap 0 g0
-noremap A g$a
 
 noremap <Up> <Nop>
 noremap <Down> <Nop>
@@ -223,9 +225,26 @@ inoremap <LEFT> <Nop>
 inoremap <c-a> <END>
 inoremap <c-0> <HOME>
 
-let g:vimfiler_as_default_explorer = 1
 
 set ambiwidth=double
+
+" CoffeeTags
+
+if executable('coffeetags')
+  let g:tagbar_type_coffee = {
+    \ 'ctagsbin' : 'coffeetags',
+    \ 'ctagsargs' : '',
+    \ 'kinds' : [
+      \ 'f:functions',
+      \ 'o:object',
+    \ ],
+    \ 'sro' : ".",
+    \ 'kind2scope' : {
+      \ 'f' : 'object',
+      \ 'o' : 'object',
+    \ }
+  \ }
+endif
 
 " for Fugitive {{{
 nnoremap <Space>gd :<C-u>Gdiff<Enter>
@@ -255,7 +274,7 @@ endif
 " tagsジャンプの時に複数ある時は一覧表示                                        
 nnoremap <C-]> g<C-]>
 " tagbar
-nmap <F5> :TagbarToggle<CR>
+nmap <Space>t :TagbarToggle<CR>
 
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
@@ -270,4 +289,16 @@ nnoremap <Leader>mg  :MemoGrep<CR>
 
 let g:memolist_path = "~/Dropbox/Memo/"
 
+" * evervim {{{
+let g:evervim_devtoken = "S=s3:U=3073f:E=1528146c26f:C=14b299595a0:P=1cd:A=en-devtoken:V=2:H=2eacb5b6ba4d1f15d55198b4dcf0d539"
+nnoremap <silent> ,el :<C-u>EvervimNotebookList<CR>
+nnoremap <silent> ,eT :<C-u>EvervimListTags<CR>
+nnoremap <silent> ,en :<C-u>EvervimCreateNote<CR>
+nnoremap <silent> ,eb :<C-u>EvervimOpenBrowser<CR>
+nnoremap <silent> ,ec :<C-u>EvervimOpenClient<CR>
+nnoremap ,es :<C-u>EvervimSearchByQuery<SPACE>
+let g:evervim_splitoption=''
+" ------------------------ }}}
+let g:vimfiler_as_default_explorer = 1
+"
 colorscheme iceberg
