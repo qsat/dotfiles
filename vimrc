@@ -65,6 +65,7 @@ let g:quickrun_config = {}
 let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
 let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
+let g:quickrun_config['swift'] = { 'command': 'xcrun', 'cmdopt': 'swift', 'exec': '%c %o %s'}
 
 "zen-coding
 "let g:user_zen_leader_key = '<C-y>'
@@ -124,6 +125,7 @@ NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
 NeoBundle 'kakkyz81/evervim'
+NeoBundle 'toyamarinyon/vim-swift'
 
 call neobundle#end()
 
@@ -281,6 +283,7 @@ nnoremap gs :vertical wincmd f<CR>
 
 "Jade
 autocmd BufNewFile,BufRead *.jade  setf jade
+autocmd BufRead,BufNewFile *.swift set filetype=swift
 
 "MemoList
 nnoremap <Leader>mn  :MemoNew<CR>
