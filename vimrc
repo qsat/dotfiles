@@ -24,6 +24,12 @@ set smartindent
 set noswapfile
 set nobackup
 set noequalalways
+set pumheight=10
+set display=lastline
+set showmatch
+set matchtime=1
+
+nnoremap Y y$
 
 set clipboard=unnamed
 "------------------------------------------------

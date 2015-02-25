@@ -6,8 +6,7 @@ alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
 
 #補間
-autoload -U compinit
-compinit
+autoload -U compinit; compinit
 
 # ------------------------------------------------------------------------
 # anyenv
@@ -26,12 +25,38 @@ fi
 export LANG=ja_JP.UTF-8
 
 #プロンプト
-autoload colors
-colors
+autoload -Uz add-zsh-hook
+autoload -Uz colors; colors
+autoload -Uz vcs_info
 
+zstyle ':vcs_info:*' enable git svn hg bzr
+zstyle ':vcs_info:*' formats '(%b)'
+zstyle ':vcs_info:*' actionformats '(%b|%a)'
+zstyle ':vcs_info:(svn|bzr):*' branchformat '%b:r%r'
+zstyle ':vcs_info:bzr:*' use-simple true
+
+autoload -Uz is-at-least
+if is-at-least 4.3.10; then
+  # この check-for-changes が今回の設定するところ
+  zstyle ':vcs_info:git:*' check-for-changes true
+  zstyle ':vcs_info:git:*' stagedstr "+"    # 適当な文字列に変更する
+  zstyle ':vcs_info:git:*' unstagedstr "-"  # 適当の文字列に変更する
+  zstyle ':vcs_info:git:*' formats '(%b) %c%u'
+  zstyle ':vcs_info:git:*' actionformats '(%b|%a) %c%u'
+fi
+
+function _update_vcs_info_msg() {
+    psvar=()
+    LANG=en_US.UTF-8 vcs_info
+    [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
+}
+add-zsh-hook precmd _update_vcs_info_msg
+
+RPROMPT="%1(v|%F{green}%1v%f|)"
 PROMPT="
- %{${fg[yellow]}%}%~%{${reset_color}%} 
+%{${fg[blue]}%}%~%{${reset_color}%}
 %n$ "
+
 
 PROMPT2='[%n]> ' 
 
