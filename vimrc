@@ -78,7 +78,7 @@ let g:quickrun_config['swift'] = { 'command': 'xcrun', 'cmdopt': 'swift', 'exec'
 let g:emmet_html5 = 0
 
 "paste mode
-set pastetoggle=<C-b>
+set pastetoggle=<F2>
 
 "neobundle
 set nocompatible               " Be iMproved
@@ -130,8 +130,10 @@ NeoBundle 'digitaltoad/vim-jade'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
+NeoBundle 'djjcast/mirodark'
 NeoBundle 'kakkyz81/evervim'
 NeoBundle 'toyamarinyon/vim-swift'
+NeoBundle 'christoomey/vim-tmux-navigator'
 
 call neobundle#end()
 
@@ -309,5 +311,5 @@ nnoremap ,es :<C-u>EvervimSearchByQuery<SPACE>
 let g:evervim_splitoption=''
 " ------------------------ }}}
 let g:vimfiler_as_default_explorer = 1
-"
+
 colorscheme iceberg
