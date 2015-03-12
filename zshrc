@@ -77,13 +77,6 @@ setopt share_history
 #先頭にスペースを入れると履歴に残さない
 setopt hist_ignore_space
 
-#履歴の検索
-autoload history-search-end
-zle -N history-beginning-search-backward-end history-search-end
-zle -N history-beginning-search-forward-end history-search-end
-bindkey "^P" history-beginning-search-backward-end
-bindkey "^N" history-beginning-search-forward-end 
-
 #cdの設定
 #ディレクトリ名だけで移動する。
 setopt auto_cd
@@ -144,3 +137,14 @@ export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$PATH:/Applications/android-sdk-macosx/tools"
 export PATH="$PATH:/Applications/Adobe\ Flash\ Builder\ 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin"
 export DOCKER_HOST="localhost"
+
+#履歴の検索
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^P" history-beginning-search-backward-end
+bindkey "^N" history-beginning-search-forward-end 
+#履歴のインクリメンタル検索でワイルドカード利用可能
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^S' history-incremental-pattern-search-forward
+
