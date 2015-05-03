@@ -134,6 +134,7 @@ NeoBundle 'djjcast/mirodark'
 NeoBundle 'kakkyz81/evervim'
 NeoBundle 'toyamarinyon/vim-swift'
 NeoBundle 'christoomey/vim-tmux-navigator'
+NeoBundle 'raichoo/purescript-vim'
 
 call neobundle#end()
 
