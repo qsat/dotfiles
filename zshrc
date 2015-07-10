@@ -4,6 +4,7 @@ alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Cres
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
+export ANDROID_HOME=/usr/local/opt/android-sdk
 
 #補間
 autoload -U compinit; compinit
@@ -124,6 +125,8 @@ setopt nobeep
 
 #エディタ
 export EDITOR=vim
+# direnv
+eval "$(direnv hook zsh)"
 
 #改行のない出力をプロンプトで上書きするのを防ぐ
 unsetopt promptcr
@@ -136,7 +139,16 @@ export PATH="/usr/local/heroku/bin:$PATH"
 
 export PATH="$PATH:/Applications/android-sdk-macosx/tools"
 export PATH="$PATH:/Applications/Adobe\ Flash\ Builder\ 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin"
+export PATH="$PATH:/Applications/android-ndk-r10e"
+export ANDROID_NDK="/Applications/android-ndk-r10e"
 export DOCKER_HOST="localhost"
+
+#source /Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/OpenNIDevEnvironment 
+source /Applications/OpenNI2/NiTE-MacOSX-x64-2.2/NiTEDevEnvironment 
+
+#export OPENNI2_INCLUDE="/Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/Include"
+#export OPENNI2_REDIST="/Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/REDIST"
+
 
 #履歴の検索
 autoload history-search-end
@@ -148,3 +160,6 @@ bindkey "^N" history-beginning-search-forward-end
 bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 
+
+PERL_MB_OPT="--install_base \"/Users/s-arai/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/s-arai/perl5"; export PERL_MM_OPT;

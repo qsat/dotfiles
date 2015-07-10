@@ -59,6 +59,12 @@ autocmd WinLeave * set nocursorline
 autocmd WinEnter,BufRead * set cursorline
 augroup END
 
+augroup Processing
+  autocmd!
+  autocmd BufNewFile *.pde NeoBundleSource vim-processing
+  autocmd BufRead    *.pde NeoBundleSource vim-processing
+augroup END
+
 
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
@@ -72,6 +78,10 @@ let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
 let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 let g:quickrun_config['swift'] = { 'command': 'xcrun', 'cmdopt': 'swift', 'exec': '%c %o %s'}
+
+let g:quickrun_config.processing = {
+\     'command': 'processing-java',
+\     'exec': '%c --sketch=%s:p:h/ --output=/tmp/processing --run --force' }
 
 "zen-coding
 "let g:user_zen_leader_key = '<C-y>'
@@ -134,6 +144,7 @@ NeoBundle 'djjcast/mirodark'
 NeoBundle 'kakkyz81/evervim'
 NeoBundle 'toyamarinyon/vim-swift'
 NeoBundle 'christoomey/vim-tmux-navigator'
+NeoBundle "sophacles/vim-processing"
 
 call neobundle#end()
 
