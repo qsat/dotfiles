@@ -28,19 +28,21 @@ set pumheight=10
 set display=lastline
 set showmatch
 set matchtime=1
+set statusline=2
 
 nnoremap Y y$
 
 set clipboard=unnamed
 "------------------------------------------------
-" neocompleteを使う
-let g:EclimCompletionMethod = 'omnifunc'
 
 " neocomplete用設定
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_ignore_case = 1
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete_auto_completion_start_length = 3
+
+" neocompleteを使う
+let g:EclimCompletionMethod = 'omnifunc'
 
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
@@ -146,7 +148,9 @@ NeoBundle 'toyamarinyon/vim-swift'
 NeoBundle 'christoomey/vim-tmux-navigator'
 NeoBundle "sophacles/vim-processing"
 NeoBundle 'raichoo/purescript-vim'
-
+NeoBundle 'endel/actionscript.vim'
+NeoBundleLazy 'ervandew/eclim', {'rev': '2.2.7','build': {'mac': 'ant -Declipse.home=/Applications/eclipse -Dvim.files='.escape(expand('~/.bundle/eclim'), '')}}
+"autocmd FileType actionscript NeoBundleSource eclim
 call neobundle#end()
 
 filetype plugin indent on     " Required!
@@ -323,5 +327,9 @@ nnoremap ,es :<C-u>EvervimSearchByQuery<SPACE>
 let g:evervim_splitoption=''
 " ------------------------ }}}
 let g:vimfiler_as_default_explorer = 1
+
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 
 colorscheme iceberg
