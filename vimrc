@@ -3,6 +3,8 @@ syntax on
 
 autocmd ColorScheme * highlight Comment ctermfg=243 guifg=#888800
 
+let mapleader = "\<Space>"
+
 let loaded_matchparen = 1
 set noundofile
 set breakindent
@@ -35,6 +37,8 @@ nnoremap Y y$
 set clipboard=unnamed
 "------------------------------------------------
 
+nmap <Leader><Leader> V
+
 " neocomplete用設定
 let g:neocomplete#enable_at_startup = 1
 let g:neocomplete#enable_ignore_case = 1
@@ -44,8 +48,6 @@ let g:neocomplete_auto_completion_start_length = 3
 " neocompleteを使う
 let g:EclimCompletionMethod = 'omnifunc'
 
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 source $VIMRUNTIME/macros/matchit.vim
 
@@ -85,6 +87,9 @@ let g:quickrun_config.processing = {
 \     'command': 'processing-java',
 \     'exec': '%c --sketch=%s:p:h/ --output=/tmp/processing --run --force' }
 
+
+
+
 "zen-coding
 "let g:user_zen_leader_key = '<C-y>'
 let g:emmet_html5 = 0
@@ -111,8 +116,7 @@ set nocompatible               " Be iMproved
  NeoBundle 'Shougo/vimproc'
 
  " My Bundles here:
- "
- " Note: You don't set neobundle setting in .gvimrc!
+ " " Note: You don't set neobundle setting in .gvimrc!
 NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neomru.vim'
@@ -149,7 +153,8 @@ NeoBundle 'christoomey/vim-tmux-navigator'
 NeoBundle "sophacles/vim-processing"
 NeoBundle 'raichoo/purescript-vim'
 NeoBundle 'endel/actionscript.vim'
-NeoBundleLazy 'ervandew/eclim', {'rev': '2.2.7','build': {'mac': 'ant -Declipse.home=/Applications/eclipse -Dvim.files='.escape(expand('~/.bundle/eclim'), '')}}
+NeoBundle 'terryma/vim-expand-region'
+"NeoBundleLazy 'ervandew/eclim', {'rev': '2.2.7','build': {'mac': 'ant -Declipse.home=/Applications/eclipse -Dvim.files='.escape(expand('~/.bundle/eclim'), '')}}
 "autocmd FileType actionscript NeoBundleSource eclim
 call neobundle#end()
 
@@ -169,26 +174,26 @@ let g:unite_source_history_yank_enable = 1
 let g:vimshell_popup_command = 'vsplit'
 " レジスタ一覧
 " 最近使用したファイル一覧
-nnoremap <silent> <Space>m :<C-u>Unite file_mru directory_mru bookmark<CR>
+nnoremap <silent> <Leader>m :<C-u>Unite file_mru directory_mru bookmark<CR>
 nnoremap <silent> vs :<C-u>VimShellPop<CR>
-nnoremap <silent> <Space>h :<C-u>Unite vimshell/history<CR>
-nnoremap <silent> <Space>n :<C-u>Unite bookmark<CR>
-nnoremap <silent> <Space>r :<C-u>Unite history/yank<CR>
-nnoremap <silent> <Space>g :<C-u>Unite grep<CR>
-nnoremap <silent> <Space>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
+nnoremap <silent> <Leader>h :<C-u>Unite vimshell/history<CR>
+nnoremap <silent> <Leader>n :<C-u>Unite bookmark<CR>
+nnoremap <silent> <Leader>r :<C-u>Unite history/yank<CR>
+nnoremap <silent> <Leader>g :<C-u>Unite grep<CR>
+nnoremap <silent> <Leader>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
 " 行検索
-nnoremap <silent> <Space>l :<C-u>Unite line<CR>
-nnoremap <silent> <Space>L :<C-u>UniteWithCursorWord line<CR>
+nnoremap <silent> <Leader>l :<C-u>Unite line<CR>
+nnoremap <silent> <Leader>L :<C-u>UniteWithCursorWord line<CR>
 " outline
 " nnoremap <silent> <Space>o :<C-u>Unite -no-quit -keep-focus outline<CR>
-nnoremap <silent> <Space>o :<C-u>Unite -no-quit outline<CR>
+nnoremap <silent> <Leader>o :<C-u>Unite -no-quit outline<CR>
 
-nnoremap <silent> <Space>um :<C-u>Unite mark<CR>
-nnoremap <silent> <Space>ul :<C-u>Unite locate<CR>
-nnoremap <silent> <Space>uu :Unite -direction=botright -default-action=vimfiler directory_mru<CR>
+nnoremap <silent> <Leader>um :<C-u>Unite mark<CR>
+nnoremap <silent> <Leader>ul :<C-u>Unite locate<CR>
+nnoremap <silent> <Leader>uu :Unite -direction=botright -default-action=vimfiler directory_mru<CR>
 
-nnoremap <silent> <Space>b :<C-u>Unite buffer<CR>
-nnoremap <silent> <Space>q :<C-u>Unite file_rec<CR>
+nnoremap <silent> <Leader>b :<C-u>Unite buffer<CR>
+nnoremap <silent> <Leader>q :<C-u>Unite file_rec<CR>
 
 " ウィンドウを縦に分割して開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
@@ -229,11 +234,15 @@ let g:lightline = {
 noremap <S-TAB> <C-w>W
 noremap <TAB> <C-w>w
 
-nmap <Space>p :VimFilerBufferDir -project<CR>
-nmap <Space>e :VimFilerBufferDir<CR>
-nmap <Space>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
-nmap <Space>, :only<CR>
-nmap <Space>. :tabc<CR>
+" 補完候補の選択
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+nmap <Leader>p :VimFilerBufferDir -project<CR>
+nmap <Leader>e :VimFilerBufferDir<CR>
+nmap <Leader>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
+nmap <Leader>, :only<CR>
+nmap <Leader>. :tabc<CR>
 
 """ヤジルシキー無効
 noremap j gj
@@ -273,17 +282,17 @@ if executable('coffeetags')
 endif
 
 " for Fugitive {{{
-nnoremap <Space>gd :<C-u>Gdiff<Enter>
-nnoremap <Space>gs :<C-u>Gstatus<Enter>
-nnoremap <Space>gl :<C-u>Gitv<Enter>
-nnoremap <Space>ga :<C-u>Gwrite<Enter>
-nnoremap <Space>gc :<C-u>Gcommit<Enter>
-nnoremap <Space>gC :<C-u>Git commit --amend<Enter>
-nnoremap <Space>gb :<C-u>Gblame<Enter>
+nnoremap <Leader>gd :<C-u>Gdiff<Enter>
+nnoremap <Leader>gs :<C-u>Gstatus<Enter>
+nnoremap <Leader>gl :<C-u>Gitv<Enter>
+nnoremap <Leader>ga :<C-u>Gwrite<Enter>
+nnoremap <Leader>gc :<C-u>Gcommit<Enter>
+nnoremap <Leader>gC :<C-u>Git commit --amend<Enter>
+nnoremap <Leader>gb :<C-u>Gblame<Enter>
 " }}}
 
-nnoremap <Space>c :<C-u>setlocal cursorcolumn!<CR>
-nnoremap <Space>w :<C-u>setlocal wrap!<CR>
+nnoremap <Leader>c :<C-u>setlocal cursorcolumn!<CR>
+nnoremap <Leader>w :<C-u>setlocal wrap!<CR>
 
 "gitv config
 
@@ -300,7 +309,7 @@ endif
 " tagsジャンプの時に複数ある時は一覧表示                                        
 nnoremap <C-]> g<C-]>
 " tagbar
-nmap <Space>t :TagbarToggle<CR>
+nmap <Leader>t :TagbarToggle<CR>
 
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
@@ -310,12 +319,11 @@ autocmd BufNewFile,BufRead *.jade  setf jade
 autocmd BufRead,BufNewFile *.swift set filetype=swift
 
 "MemoList
-nnoremap <Leader>mn  :MemoNew<CR>
-nnoremap <Leader>ml  :MemoList<CR>
-nnoremap <Leader>mg  :MemoGrep<CR>
-
+"
+" nnoremap <Leader>,n  :MemoNew<CR>
+" nnoremap <Leader>,l  :MemoList<CR>
+" nnoremap <Leader>,g  :MemoGrep<CR>
 let g:memolist_path = "~/Dropbox/Memo/"
-
 " * evervim {{{
 let g:evervim_devtoken = "S=s3:U=3073f:E=1528146c26f:C=14b299595a0:P=1cd:A=en-devtoken:V=2:H=2eacb5b6ba4d1f15d55198b4dcf0d539"
 nnoremap <silent> ,el :<C-u>EvervimNotebookList<CR>
@@ -328,8 +336,25 @@ let g:evervim_splitoption=''
 " ------------------------ }}}
 let g:vimfiler_as_default_explorer = 1
 
-let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+" let g:tmux_navigator_no_mappings = 1
+" nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+" nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
+
+nnoremap <CR> G
+nnoremap <BS> gg
+
+" vp doesn't replace paste buffer
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+function! s:Repl()
+  let s:restore_reg = @"
+  return "p@=RestoreRegister()\<cr>"
+endfunction
+vmap <silent> <expr> p <sid>Repl()
 
 colorscheme iceberg
