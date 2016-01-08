@@ -31,13 +31,14 @@ set display=lastline
 set showmatch
 set matchtime=1
 set statusline=2
-
 nnoremap Y y$
 
 set clipboard=unnamed
 "------------------------------------------------
 
 nmap <Leader><Leader> V
+nmap <ESC><ESC> :nohlsearch<CR>
+inoremap jj <ESC>
 
 " neocomplete用設定
 let g:neocomplete#enable_at_startup = 1
@@ -46,7 +47,7 @@ let g:neocomplete#enable_smart_case = 1
 let g:neocomplete_auto_completion_start_length = 3
 
 " neocompleteを使う
-let g:EclimCompletionMethod = 'omnifunc'
+" let g:EclimCompletionMethod = 'omnifunc'
 
 
 source $VIMRUNTIME/macros/matchit.vim
@@ -83,9 +84,9 @@ let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']
 let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 let g:quickrun_config['swift'] = { 'command': 'xcrun', 'cmdopt': 'swift', 'exec': '%c %o %s'}
 
-let g:quickrun_config.processing = {
-\     'command': 'processing-java',
-\     'exec': '%c --sketch=%s:p:h/ --output=/tmp/processing --run --force' }
+" let g:quickrun_config.processing = {
+" \     'command': 'processing-java',
+" \     'exec': '%c --sketch=%s:p:h/ --output=/tmp/processing --run --force' }
 
 
 
@@ -122,38 +123,54 @@ NeoBundle 'Shougo/neocomplete'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
-NeoBundle "Shougo/unite-outline"
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'ujihisa/unite-locate'
-NeoBundle 'violetyk/cake.vim'
-NeoBundle 'oppara/vim-unite-cake'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
-NeoBundle 'tpope/vim-rails'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'gregsexton/gitv'
-NeoBundle 'tacroe/unite-mark'
-NeoBundle 'Gist.vim'
+"NeoBundle 'gregsexton/gitv'
+"NeoBundle 'tacroe/unite-mark'
+"NeoBundle 'Gist.vim'
 NeoBundle 'jelera/vim-javascript-syntax'
-NeoBundle 'http://github.com/kchmck/vim-coffee-script'
+NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'https://github.com/mattn/emmet-vim.git'
-NeoBundle 'wavded/vim-stylus'
-NeoBundle "sakuraiyuta/commentout.vim"
+NeoBundle 'sakuraiyuta/commentout.vim'
 NeoBundle "rhysd/clever-f.vim"
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'lukaszkorecki/CoffeeTags'
+"NeoBundle 'majutsushi/tagbar'
 NeoBundle 'digitaltoad/vim-jade'
-NeoBundle 'glidenote/memolist.vim'
+NeoBundle 'wavded/vim-stylus'
+"NeoBundle 'raichoo/purescript-vim'
+"NeoBundle 'endel/actionscript.vim'
+"NeoBundle 'tpope/vim-rails'
+"NeoBundle 'glidenote/memolist.vim'
+"NeoBundle 'toyamarinyon/vim-swift'
+"NeoBundle 'sophacles/vim-processing'
+"NeoBundle 'oppara/vim-unite-cake'
+"NeoBundle 'violetyk/cake.vim'
+
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
-NeoBundle 'djjcast/mirodark'
-NeoBundle 'kakkyz81/evervim'
-NeoBundle 'toyamarinyon/vim-swift'
+"NeoBundle 'djjcast/mirodark'
+"NeoBundle 'kakkyz81/evervim'
 NeoBundle 'christoomey/vim-tmux-navigator'
-NeoBundle "sophacles/vim-processing"
-NeoBundle 'raichoo/purescript-vim'
-NeoBundle 'endel/actionscript.vim'
 NeoBundle 'terryma/vim-expand-region'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'rking/ag.vim'
+NeoBundle 'Quramy/tsuquyomi'
+
+
+NeoBundleLazy 'leafgarland/typescript-vim', {
+\ 'autoload' : {
+\   'filetypes' : ['typescript'] }
+\}
+
+"NeoBundleLazy 'jason0x43/vim-js-indent', {
+"\ 'autoload' : {
+"\   'filetypes' : ['javascript', 'typescript', 'html'],
+"\}}
+
+
 "NeoBundleLazy 'ervandew/eclim', {'rev': '2.2.7','build': {'mac': 'ant -Declipse.home=/Applications/eclipse -Dvim.files='.escape(expand('~/.bundle/eclim'), '')}}
 "autocmd FileType actionscript NeoBundleSource eclim
 call neobundle#end()
@@ -163,12 +180,32 @@ filetype plugin indent on     " Required!
 " Installation check.
 NeoBundleCheck
 
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+if !exists('g:neocomplete#force_omni_input_patterns')
+  let g:neocomplete#force_omni_input_patterns = {}
+endif
+
+" typescript
+"let g:js_indent_typescript = 1
+"let g:typescript_compiler_options = '--module commonjs --target ES6 --noImplicitAny'
+" let g:neocomplete#sources#omni#input_patterns.typescript = '\h\w*\|[^. \t]\.\w*'
+
 """ unite.vim
 " 入力モードで開始する
 let g:unite_enable_start_insert=1
 let g:unite_winwidth = 40 
 let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
+let g:tsuquyomi_disable_quickfix = 1
+
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+endif
 
 """ vimshell
 let g:vimshell_popup_command = 'vsplit'
@@ -178,7 +215,7 @@ nnoremap <silent> <Leader>m :<C-u>Unite file_mru directory_mru bookmark<CR>
 nnoremap <silent> vs :<C-u>VimShellPop<CR>
 nnoremap <silent> <Leader>h :<C-u>Unite vimshell/history<CR>
 nnoremap <silent> <Leader>n :<C-u>Unite bookmark<CR>
-nnoremap <silent> <Leader>r :<C-u>Unite history/yank<CR>
+nnoremap <silent> <Leader>R :<C-u>Unite history/yank<CR>
 nnoremap <silent> <Leader>g :<C-u>Unite grep<CR>
 nnoremap <silent> <Leader>G :<C-u>Unite grep:%::<C-R>=expand("<cword>")<CR><CR>
 " 行検索
@@ -238,7 +275,7 @@ noremap <TAB> <C-w>w
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-nmap <Leader>p :VimFilerBufferDir -project<CR>
+nmap <Leader>p :CtrlP<CR>
 nmap <Leader>e :VimFilerBufferDir<CR>
 nmap <Leader>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
 nmap <Leader>, :only<CR>
@@ -262,24 +299,6 @@ inoremap <c-0> <HOME>
 
 
 set ambiwidth=double
-
-" CoffeeTags
-
-if executable('coffeetags')
-  let g:tagbar_type_coffee = {
-    \ 'ctagsbin' : 'coffeetags',
-    \ 'ctagsargs' : '',
-    \ 'kinds' : [
-      \ 'f:functions',
-      \ 'o:object',
-    \ ],
-    \ 'sro' : ".",
-    \ 'kind2scope' : {
-      \ 'f' : 'object',
-      \ 'o' : 'object',
-    \ }
-  \ }
-endif
 
 " for Fugitive {{{
 nnoremap <Leader>gd :<C-u>Gdiff<Enter>
@@ -356,5 +375,12 @@ function! s:Repl()
   return "p@=RestoreRegister()\<cr>"
 endfunction
 vmap <silent> <expr> p <sid>Repl()
+
+
+let g:ctrlp_map = '<Nop>'
+let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
+let g:ctrlp_match_window = 'top,order:ttb,max:20'
+let g:ctrlp_cmd = 'CtrlPMRU'
+let g:fuzzy_ignore = "*.class,*.pyc,*.log,*.o"
 
 colorscheme iceberg
