@@ -6,6 +6,8 @@ alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
+export XDG_CONFIG_HOME=~/.config
+
 #補間
 autoload -U compinit; compinit
 
@@ -20,7 +22,7 @@ if [ -d ${HOME}/.anyenv ] ; then
         export PATH="$D/shims:$PATH"
     done
 
-fi
+  fi
 
 #文字コード
 export LANG=ja_JP.UTF-8
@@ -115,6 +117,8 @@ esac
 alias la='ls -a'
 alias ll='ls -l'
 alias lla='ls -al'
+alias less='less -qR'
+alias lesss='less -qRsS'
 
 #その他
 #キーバインド

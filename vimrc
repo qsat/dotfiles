@@ -29,6 +29,7 @@ set noequalalways
 set pumheight=10
 set display=lastline
 set showmatch
+set incsearch
 set matchtime=1
 set statusline=2
 nnoremap Y y$
@@ -48,16 +49,12 @@ let g:neocomplete_auto_completion_start_length = 3
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 
-" neocompleteを使う
-" let g:EclimCompletionMethod = 'omnifunc'
-
-
 source $VIMRUNTIME/macros/matchit.vim
 
-highlight LineNr ctermfg=238 ctermbg=none
-highlight CursorLine cterm=none ctermbg=238 guibg=black
-highlight CursorColumn cterm=none ctermbg=238 guibg=black
-highlight Visual cterm=none ctermbg=240 guibg=black
+"highlight LineNr ctermfg=238 ctermbg=none
+"highlight CursorLine cterm=none ctermbg=238 guibg=black
+"highlight CursorColumn cterm=none ctermbg=238 guibg=black
+"highlight Visual cterm=none ctermbg=240 guibg=black
 
 " カレントウィンドウにのみ罫線を引く
 augroup cch
@@ -75,23 +72,22 @@ augroup END
 
 "scss
 au BufRead,BufNewFile *.scss set filetype=scss
+au BufRead,BufNewFile *.mstyl set filetype=stylus
 
 "actionscript
 autocmd! BufNewFile,BufRead *.as setlocal filetype=actionscript
 
-"coffeescript
 let g:quickrun_config = {}
 let g:quickrun_config={'*': {'split': 'vertical'}}
 let g:quickrun_config['coffee'] = {'command' : 'coffee', 'exec' : ['%c -cbp %s']}
 let g:quickrun_config['jade'] = {'command': 'jade', 'cmdopt': '-P', 'exec': ['%c -P < %s']}
 let g:quickrun_config['swift'] = { 'command': 'xcrun', 'cmdopt': 'swift', 'exec': '%c %o %s'}
+let g:quickrun_config['cpp'] = { 'command': 'g++', 'cmdopt': '-std=c++11'}
+
 
 " let g:quickrun_config.processing = {
 " \     'command': 'processing-java',
 " \     'exec': '%c --sketch=%s:p:h/ --output=/tmp/processing --run --force' }
-
-
-
 
 "zen-coding
 "let g:user_zen_leader_key = '<C-y>'
@@ -147,9 +143,6 @@ NeoBundle 'wavded/vim-stylus'
 "NeoBundle 'tpope/vim-rails'
 "NeoBundle 'glidenote/memolist.vim'
 "NeoBundle 'toyamarinyon/vim-swift'
-"NeoBundle 'sophacles/vim-processing'
-"NeoBundle 'oppara/vim-unite-cake'
-"NeoBundle 'violetyk/cake.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/iceberg.vim'
@@ -160,7 +153,7 @@ NeoBundle 'terryma/vim-expand-region'
 NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'Quramy/tsuquyomi'
-
+NeoBundle 'justmao945/vim-clang'
 
 NeoBundleLazy 'leafgarland/typescript-vim', {
 \ 'autoload' : {
@@ -179,6 +172,7 @@ NeoBundleLazy 'OmniSharp/omnisharp-vim', {
 NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] } }
 
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'evidens/vim-twig'
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -189,14 +183,15 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-"NeoBundleLazy 'jason0x43/vim-js-indent', {
-"\ 'autoload' : {
-"\   'filetypes' : ['javascript', 'typescript', 'html'],
-"\}}
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = '--std=c++11 --stdlib=libc++'
+let g:syntastic_html_checkers=['']
 
+NeoBundleLazy 'jason0x43/vim-js-indent', {
+\ 'autoload' : {
+\   'filetypes' : ['javascript', 'typescript', 'html'],
+\}}
 
-"NeoBundleLazy 'ervandew/eclim', {'rev': '2.2.7','build': {'mac': 'ant -Declipse.home=/Applications/eclipse -Dvim.files='.escape(expand('~/.bundle/eclim'), '')}}
-"autocmd FileType actionscript NeoBundleSource eclim
 call neobundle#end()
 
 filetype plugin indent on     " Required!
@@ -212,13 +207,32 @@ if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
 
+let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+
 " typescript
-"let g:js_indent_typescript = 1
-"let g:typescript_compiler_options = '--module commonjs --target ES6 --noImplicitAny'
+let g:js_indent_typescript = 1
+" let g:typescript_compiler_options = '--module commonjs --target ES6 --noImplicitAny'
 " let g:neocomplete#sources#omni#input_patterns.typescript = '\h\w*\|[^. \t]\.\w*'
+
+" disable auto completion for vim-clang
+let g:clang_auto = 0
+
+" default 'longest' can not work with neocomplete
+let g:clang_c_completeopt   = 'menuone'
+let g:clang_cpp_completeopt = 'menuone'
+let g:clang_exec = 'clang++'
+"let g:clang_exec = 'clang'
+"let g:clang_exec = 'clang-format'
+
+let g:clang_c_options = '-std=c11'
+let g:clang_cpp_options = '-std=c++1z -stdlib=libc++ --pedantic-errors'
+"let g:clang_cpp_options = '-std=c++11 -stdlib=libc++'
+
+setlocal path += "/Applications/of_v0.9.3_osx_release/libs/openFrameworks"
 
 
 " Define dictionary.
+
 let g:neocomplete#sources#dictionary#dictionaries = {
     \ 'default' : '',
     \ 'vimshell' : $HOME.'/.vimshell_hist',
@@ -230,47 +244,6 @@ if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
-"
-" Plugin key-mappings.
-inoremap <expr><C-g>     neocomplete#undo_completion()
-inoremap <expr><C-l>     neocomplete#complete_common_string()
-
-" Recommended key-mappings.
-" <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-  return neocomplete#close_popup() . "\<CR>"
-  " For no inserting <CR> key.
-  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-endfunction
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplete#close_popup()
-inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -281,17 +254,10 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
 
 " Enable heavy omni completion.
-if !exists('g:neocomplete#sources#omni#input_patterns')
-  let g:neocomplete#sources#omni#input_patterns = {}
-endif
-
 "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 let g:neocomplete#sources#omni#input_patterns.cs = '.*[^=\);]'
 
 """ unite.vim
@@ -301,6 +267,8 @@ let g:unite_winwidth = 40
 let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
 let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_use_local_typescript = 0
+let g:syntastic_typescript_tsc_fname = ''
 
 if executable('ag')
   let g:unite_source_grep_command = 'ag'
@@ -326,7 +294,6 @@ nnoremap <silent> <Leader>L :<C-u>UniteWithCursorWord line<CR>
 " nnoremap <silent> <Space>o :<C-u>Unite -no-quit -keep-focus outline<CR>
 nnoremap <silent> <Leader>o :<C-u>Unite -no-quit outline<CR>
 
-nnoremap <silent> <Leader>um :<C-u>Unite mark<CR>
 nnoremap <silent> <Leader>ul :<C-u>Unite locate<CR>
 nnoremap <silent> <Leader>uu :Unite -direction=botright -default-action=vimfiler directory_mru<CR>
 
@@ -380,7 +347,6 @@ nmap <Leader>p :CtrlP<CR>
 nmap <Leader>e :VimFilerBufferDir<CR>
 nmap <Leader>v :VimFilerBufferDir -project -find -split -simple -winwidth=45 -toggle -no-quit<CR>
 nmap <Leader>, :only<CR>
-nmap <Leader>. :tabc<CR>
 
 """ヤジルシキー無効
 noremap j gj
@@ -397,9 +363,6 @@ inoremap <RIGHT> <Nop>
 inoremap <LEFT> <Nop>
 inoremap <c-a> <END>
 inoremap <c-0> <HOME>
-
-
-set ambiwidth=double
 
 " for Fugitive {{{
 nnoremap <Leader>gd :<C-u>Gdiff<Enter>
@@ -477,7 +440,6 @@ function! s:Repl()
 endfunction
 vmap <silent> <expr> p <sid>Repl()
 
-
 let g:ctrlp_map = '<Nop>'
 let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
 let g:ctrlp_match_window = 'top,order:ttb,max:20'
@@ -485,3 +447,13 @@ let g:ctrlp_cmd = 'CtrlPMRU'
 let g:fuzzy_ignore = "*.class,*.pyc,*.log,*.o"
 
 colorscheme iceberg
+
+if executable('osascript')
+  let s:keycode_jis_eisuu = 102
+  let g:force_alphanumeric_input_command = "osascript -e 'tell application \"System Events\" to key code " . s:keycode_jis_eisuu . "' &"
+
+  inoremap <silent> <Esc> <Esc>:call system(g:force_alphanumeric_input_command)<CR>
+
+  autocmd! FocusGained *
+    \ call system(g:force_alphanumeric_input_command)
+endif
