@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =8
+let g:netrw_dirhist_1='/Users/01017830/dotfiles/nvim'
+let g:netrw_dirhist_2='/Users/01017830/dotfiles'
+let g:netrw_dirhist_3='/Users/01017830/Desktop/@recruit-tech:javascripting'
+let g:netrw_dirhist_4='/Users/01017830/Projects/bar-component/src/bar'
+let g:netrw_dirhist_5='/Users/01017830/Projects/bar-component/src'
+let g:netrw_dirhist_6='/Users/01017830/Projects/bar-component'
+let g:netrw_dirhist_7='/Users/01017830/Projects/bar-component/src/bar'
+let g:netrw_dirhist_8='/Users/01017830/Projects/bar-component/src'

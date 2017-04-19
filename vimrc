@@ -111,7 +111,7 @@ set nocompatible               " Be iMproved
 
  " Recommended to install
  " After install, turn shell ~/.vim/bundle/vimproc, (n,g)make -f your_machines_makefile
- NeoBundle 'Shougo/vimshell'
+"  NeoBundle 'Shougo/vimshell'
  NeoBundle 'Shougo/vimproc'
 
  " My Bundles here:
@@ -122,7 +122,7 @@ NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/unite-outline'
-NeoBundle 'ujihisa/unite-locate'
+"NeoBundle 'ujihisa/unite-locate'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'tpope/vim-surround'
@@ -136,8 +136,8 @@ NeoBundle 'https://github.com/mattn/emmet-vim.git'
 NeoBundle 'sakuraiyuta/commentout.vim'
 NeoBundle "rhysd/clever-f.vim"
 "NeoBundle 'majutsushi/tagbar'
-NeoBundle 'digitaltoad/vim-jade'
-NeoBundle 'wavded/vim-stylus'
+"NeoBundle 'digitaltoad/vim-jade'
+"NeoBundle 'wavded/vim-stylus'
 "NeoBundle 'raichoo/purescript-vim'
 "NeoBundle 'endel/actionscript.vim'
 "NeoBundle 'tpope/vim-rails'
@@ -153,26 +153,15 @@ NeoBundle 'terryma/vim-expand-region'
 NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'Quramy/tsuquyomi'
-NeoBundle 'justmao945/vim-clang'
+"NeoBundle 'justmao945/vim-clang'
 
-NeoBundleLazy 'leafgarland/typescript-vim', {
-\ 'autoload' : {
-\   'filetypes' : ['typescript'] }
-\}
-
-NeoBundleLazy 'OmniSharp/omnisharp-vim', {
-\   'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] },
-\   'build': {
-\     'windows' : 'msbuild server/OmniSharp.sln',
-\     'mac': 'xbuild server/OmniSharp.sln',
-\     'unix': 'xbuild server/OmniSharp.sln',
-\   },
-\ }
-
-NeoBundleLazy 'OrangeT/vim-csharp', { 'autoload': { 'filetypes': [ 'cs', 'csi', 'csx' ] } }
+"NeoBundleLazy 'leafgarland/typescript-vim', {
+"\ 'autoload' : {
+"\   'filetypes' : ['typescript'] }
+"\}
 
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'evidens/vim-twig'
+"NeoBundle 'evidens/vim-twig'
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -251,7 +240,6 @@ autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
 autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-autocmd FileType cs setlocal omnifunc=OmniSharp#Complete
 
 " Enable heavy omni completion.
 "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'

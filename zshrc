@@ -1,12 +1,15 @@
+alias nvim=~/Apps/nvim-osx64/bin/nvim
 #alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
-#alias vi=vim
+alias vim=nvim
+alias vi=nvim
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
+export TERM=xterm-256color
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.6`
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
-export XDG_CONFIG_HOME=~/.config
+export XDG_CONFIG_HOME=~/dotfiles
 
 #補間
 autoload -U compinit; compinit
@@ -122,7 +125,8 @@ alias lesss='less -qRsS'
 
 #その他
 #キーバインド
-bindkey -e
+bindkey -v
+bindkey -M viins 'jj' vi-cmd-mode
 
 #ビープ音ならなさない
 setopt nobeep
@@ -142,17 +146,9 @@ unsetopt promptcr
 export PATH="/usr/local/heroku/bin:$PATH"
 
 export PATH="$PATH:/Applications/android-sdk-macosx/tools"
-export PATH=$PATH:/Applications/Adobe\ Flash\ Builder\ 4.7/eclipse/plugins/com.adobe.flash.compiler_4.7.0.349722/AIRSDK/bin
 export PATH="$PATH:/Applications/android-ndk-r10e"
 export ANDROID_NDK="/Applications/android-ndk-r10e"
 export DOCKER_HOST="localhost"
-
-#source /Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/OpenNIDevEnvironment 
-source /Applications/OpenNI2/NiTE-MacOSX-x64-2.2/NiTEDevEnvironment 
-
-#export OPENNI2_INCLUDE="/Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/Include"
-#export OPENNI2_REDIST="/Applications/OpenNI2/OpenNI-MacOSX-x64-2.2/REDIST"
-
 
 #履歴の検索
 autoload history-search-end
@@ -165,64 +161,6 @@ bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 
 
-PERL_MB_OPT="--install_base \"/Users/s-arai/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/s-arai/perl5"; export PERL_MM_OPT;
-
-
-function is_exists() { type "$1" >/dev/null 2>&1; return $?; }
-function is_osx() { [[ $OSTYPE == darwin* ]]; }
-function is_screen_running() { [ ! -z "$STY" ]; }
-function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
-function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
-function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
-function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
-
-function tmux_automatically_attach_session()
-{
-    if is_screen_or_tmux_running; then
-        ! is_exists 'tmux' && return 1
-
-        if is_tmux_runnning; then
-            echo "${fg_bold[blue]}===== tmux =====${reset_color}"
-        elif is_screen_running; then
-            echo "This is on screen."
-        fi
-    else
-        if shell_has_started_interactively && ! is_ssh_running; then
-            if ! is_exists 'tmux'; then
-                echo 'Error: tmux command not found' 2>&1
-                return 1
-            fi
-
-            if tmux has-session >/dev/null 2>&1 && tmux list-sessions | grep -qE '.*]$'; then
-                # detached session exists
-                tmux list-sessions
-                echo -n "Tmux: attach? (y/N/num) "
-                read
-                if [[ "$REPLY" =~ ^[Yy]$ ]] || [[ "$REPLY" == '' ]]; then
-                    tmux attach-session
-                    if [ $? -eq 0 ]; then
-                        echo "$(tmux -V) attached session"
-                        return 0
-                    fi
-                elif [[ "$REPLY" =~ ^[0-9]+$ ]]; then
-                    tmux attach -t "$REPLY"
-                    if [ $? -eq 0 ]; then
-                        echo "$(tmux -V) attached session"
-                        return 0
-                    fi
-                fi
-            fi
-
-            if is_osx && is_exists 'reattach-to-user-namespace'; then
-                # on OS X force tmux's default command
-                # to spawn a shell in the user's namespace
-                tmux_config=$(cat $HOME/.tmux.conf <(echo 'set-option -g default-command "reattach-to-user-namespace -l $SHELL"'))
-                tmux -f <(echo "$tmux_config") new-session && echo "$(tmux -V) created new session supported OS X"
-            else
-                tmux new-session && echo "tmux created new session"
-            fi
-        fi
-    fi
-}
-tmux_automatically_attach_session
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/01017830/.sdkman"
+[[ -s "/Users/01017830/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/01017830/.sdkman/bin/sdkman-init.sh"
