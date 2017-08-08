@@ -45,7 +45,6 @@ let g:deoplete#enable_smart_case = 1
 let g:deoplete#file#enable_buffer_path = 1
 let g:deoplete#max_list = 10000
 
-
 "dein Scripts-----------------------------
 if &compatible
   set nocompatible               " Be iMproved
@@ -65,14 +64,17 @@ if dein#load_state('~/.config/nvim/dein')
   " Add or remove your plugins here:
 
  call dein#add('tpope/vim-surround')
- call dein#add('Shougo/deoplete.nvim', { 'on_i': 1 })
- call dein#add('ctrlpvim/ctrlp.vim')
+ call dein#add('Shougo/deoplete.nvim')
+ call dein#add('Shougo/denite.nvim')
+ call dein#add('Shougo/neomru.vim')
  call dein#add('thinca/vim-qfreplace')
  call dein#add('mileszs/ack.vim')
 
  call dein#add('w0rp/ale')
  call dein#add('pangloss/vim-javascript')
  call dein#add('MaxMEllon/vim-jsx-pretty')
+ call dein#add('tpope/vim-fugitive')
+ call dein#add('GutenYe/json5.vim')
 
 
   " Required:
@@ -99,10 +101,11 @@ noremap <S-TAB> <C-w>W
 noremap <TAB> <C-w>w
 noremap <Leader>n :browse oldfiles<CR>
 noremap <Leader>b :b 
-noremap <Leader>e :e .<CR>
 noremap <Leader>t :terminal<CR>
 noremap <Leader>Q :cprevious<CR>
 noremap <Leader>q :cnext<CR>
+noremap <Leader>L :lp<CR>
+noremap <Leader>l :lne<CR>
 
 noremap j gj
 noremap k gk
@@ -117,51 +120,36 @@ set fileformats=unix,dos,mac
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-" CtrlP
-noremap <Leader>m :CtrlPMRUFiles<CR>
-noremap <Leader>p :CtrlP<CR>
-
-let g:ctrlp_map = '<Nop>'
-let g:ctrlp_lazy_update = 1
-let g:ctrlp_extensions = ['tag', 'quickfix', 'dir', 'line', 'mixed']
-let g:ctrlp_match_window = 'top,order:ttb,max:20'
-let g:ctrlp_cmd = 'CtrlPMRU'
-let g:fuzzy_ignore = "*.class,*.pyc,*.log,*.o"
+" Denite
+noremap <Leader>m :Denite file_mru directory_mru bookmark<CR>
+noremap <Leader>e :DeniteBufferDir file_rec<CR>
+noremap <Leader>p :DeniteProjectDir file_rec<CR>
 
 if executable('ag')
-  let g:ctrlp_use_caching=0
-  let g:ctrlp_user_command='ag %s -i --nocolor --nogroup -g ""'
   let g:ackprg = 'ag --vimgrep'
   let g:ack_qhandler = "botright copen 30"
+
+  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+  call denite#custom#var('grep', 'command', ['ag'])
+  call denite#custom#var('grep', 'recursive_opts', [])
+  call denite#custom#var('grep', 'pattern_opt', [])
+  call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
+  call denite#custom#map('_', "<C-v>", '<denite:do_action:vsplit>')
+  call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 endif
 
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
 " Use ALE
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 let g:ale_open_list = 1
+let g:ale_lint_on_text_changed = 'never'
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
-
-" Netrw
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-
-augroup netrw_mapping
-  autocmd!
-  autocmd filetype netrw call NetrwMapping()
-augroup END
-
-function! NetrwMapping()
-  noremap <buffer> h -
-  noremap <buffer> l <Enter>
-endfunction
 
 " ファイル名表示
 set statusline=%F
