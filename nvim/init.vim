@@ -30,7 +30,7 @@ set incsearch
 set matchtime=1
 set statusline=2
 set autochdir
-
+set notitle
 set clipboard=unnamed
 
 " Use deoplete
@@ -97,6 +97,7 @@ endif
 nmap <Leader><Leader> V
 nmap <ESC><ESC> :nohlsearch<CR>
 inoremap jj <ESC>
+inoremap kk <ESC>
 
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
@@ -105,6 +106,7 @@ noremap <S-TAB> <C-w>W
 noremap <TAB> <C-w>w
 noremap <Leader>n :browse oldfiles<CR>
 noremap <Leader>b :b 
+noremap <Leader>, :only<CR>
 noremap <Leader>t :terminal<CR>
 noremap <Leader>Q :cprevious<CR>
 noremap <Leader>q :cnext<CR>
@@ -114,6 +116,8 @@ noremap <Leader>l :lne<CR>
 noremap j gj
 noremap k gk
 noremap 0 g0
+noremap <Leader>] gT
+noremap <Leader>[ gt
 
 tnoremap <silent> <ESC> <C-\><C-n>
 
@@ -125,11 +129,12 @@ inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
 """ unite.vim
+let g:unite_enable_start_insert=1
 let g:unite_winwidth = 40 
 let g:unite_winheight = 20
 let g:unite_source_history_yank_enable = 1
 
-noremap <silent> <Leader>m :<C-u>Unite file_mru directory_mru<CR>
+noremap <silent> <Leader>m :<C-u>Unite -direction=botright file_mru directory_mru<CR>
 " ウィンドウを縦に分割して開く
 au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
 au FileType unite inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
@@ -159,7 +164,7 @@ if executable('ag')
   call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 endif
 
-cnoreabbrev Ack Ack!
+" cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
 " Use ALE
@@ -191,5 +196,8 @@ set statusline+=[%{&fileencoding}]
 set statusline+=%l/%L
 " ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
 set laststatus=2
+
+nnoremap <Leader>h :silent! !tig -- %:p<CR>:redraw!<CR>
+nnoremap <Leader>g :silent! !tig blame %:p<CR>:redraw!<CR>
 
 colorscheme iceberg

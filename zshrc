@@ -132,7 +132,7 @@ bindkey -M viins 'jj' vi-cmd-mode
 setopt nobeep
 
 #エディタ
-export EDITOR=vim
+export EDITOR=/usr/bin/vim
 # direnv
 eval "$(direnv hook zsh)"
 
