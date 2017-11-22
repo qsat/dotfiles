@@ -33,6 +33,10 @@ set autochdir
 set notitle
 set clipboard=unnamed
 
+let g:netrw_banner = 0
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 25
+
 " Use deoplete
 
 let g:deoplete#enable_at_startup = 1
@@ -66,7 +70,6 @@ if dein#load_state('~/.config/nvim/dein')
  call dein#add('tpope/vim-surround')
  call dein#add('Shougo/deoplete.nvim')
  call dein#add('Shougo/denite.nvim')
- call dein#add('Shougo/unite.vim')
  call dein#add('Shougo/neomru.vim')
  call dein#add('thinca/vim-qfreplace')
  call dein#add('mileszs/ack.vim')
@@ -116,8 +119,8 @@ noremap <Leader>l :lne<CR>
 noremap j gj
 noremap k gk
 noremap 0 g0
-noremap <Leader>] gT
-noremap <Leader>[ gt
+noremap <Leader>[ gT
+noremap <Leader>] gt
 
 tnoremap <silent> <ESC> <C-\><C-n>
 
@@ -128,32 +131,15 @@ set fileformats=unix,dos,mac
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-""" unite.vim
-let g:unite_enable_start_insert=1
-let g:unite_winwidth = 40 
-let g:unite_winheight = 20
-let g:unite_source_history_yank_enable = 1
-
-noremap <silent> <Leader>m :<C-u>Unite -direction=botright file_mru directory_mru<CR>
-" ウィンドウを縦に分割して開く
-au FileType unite nnoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
-au FileType unite inoremap <silent> <buffer> <expr> <C-v> unite#do_action('vsplit')
-" ESCキーを2回押すと終了する
-au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-
 " Denite
 " noremap <Leader>m :Denite file_mru directory_mru<CR>
-noremap <Leader>e :DeniteBufferDir file_rec<CR>
+noremap <Leader>e :Vexplore .<CR>
 noremap <Leader>p :DeniteProjectDir file_rec<CR>
+noremap <Leader>m :Denite file_mru<CR>
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ack_qhandler = "botright copen 30"
-
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:unite_source_grep_recursive_opt = ''
 
   call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
   call denite#custom#var('grep', 'command', ['ag'])
@@ -165,7 +151,7 @@ if executable('ag')
 endif
 
 " cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 
 " Use ALE
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
