@@ -37,6 +37,13 @@ let g:netrw_banner = 0
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 25
 
+augroup netrw
+  autocmd!
+  autocmd FileType netrw map <buffer> l <Return>
+  autocmd FileType netrw map <buffer> h -
+  autocmd FileType netrw map <buffer> q :bd<Return>
+augroup END
+
 " Use deoplete
 
 let g:deoplete#enable_at_startup = 1
@@ -153,9 +160,9 @@ endif
 " cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 
-" Use ALE
-let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
-let g:ale_open_list = 1
+" ALE
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 let g:ale_lint_on_text_changed = 'never'
 
 " □とか○の文字があってもカーソル位置がずれないようにする
@@ -182,8 +189,5 @@ set statusline+=[%{&fileencoding}]
 set statusline+=%l/%L
 " ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
 set laststatus=2
-
-nnoremap <Leader>h :silent! !tig -- %:p<CR>:redraw!<CR>
-nnoremap <Leader>g :silent! !tig blame %:p<CR>:redraw!<CR>
 
 colorscheme iceberg
