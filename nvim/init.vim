@@ -87,6 +87,7 @@ if dein#load_state('~/.config/nvim/dein')
  call dein#add('tpope/vim-fugitive')
  call dein#add('GutenYe/json5.vim')
 
+ call dein#add('prettier/vim-prettier')
 
   " Required:
   call dein#end()
@@ -170,6 +171,8 @@ let g:ale_lint_on_text_changed = 'never'
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
+
+let g:prettier#config#semi = 'false'
 
 " ファイル名表示
 set statusline=%F
