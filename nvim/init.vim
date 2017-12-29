@@ -153,9 +153,10 @@ if executable('ag')
   call denite#custom#var('grep', 'recursive_opts', [])
   call denite#custom#var('grep', 'pattern_opt', [])
   call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
-  call denite#custom#map('_', "<C-v>", '<denite:do_action:vsplit>')
-  call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 endif
+
+call denite#custom#map('_', "<C-v>", '<denite:do_action:vsplit>')
+call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 
 " cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Gcd <bar> Ack!<Space>

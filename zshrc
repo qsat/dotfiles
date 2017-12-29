@@ -1,7 +1,5 @@
-alias nvim=~/Apps/nvim-osx64/bin/nvim
-#alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
 alias vim=nvim
-alias vi=nvim
+alias vi
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
 
