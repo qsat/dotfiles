@@ -87,8 +87,6 @@ if dein#load_state('~/.config/nvim/dein')
  call dein#add('tpope/vim-fugitive')
  call dein#add('GutenYe/json5.vim')
 
- call dein#add('prettier/vim-prettier')
-
   " Required:
   call dein#end()
   call dein#save_state()
@@ -167,12 +165,17 @@ let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_lint_on_text_changed = 'never'
 
+let g:ale_fixers = {
+\ 'javascript': ['prettier'],
+\ 'json': ['prettier']
+\ }
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5 --no-semi --arrow-parens always'
+let g:ale_fix_on_save = 1
+
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
-
-let g:prettier#config#semi = 'false'
 
 " ファイル名表示
 set statusline=%F
