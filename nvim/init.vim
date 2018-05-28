@@ -29,12 +29,13 @@ set showmatch
 set incsearch
 set matchtime=1
 set statusline=2
-set autochdir
+" set autochdir
 set notitle
 set clipboard=unnamed
 
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
+let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
 augroup netrw
@@ -86,6 +87,8 @@ if dein#load_state('~/.config/nvim/dein')
  call dein#add('MaxMEllon/vim-jsx-pretty')
  call dein#add('tpope/vim-fugitive')
  call dein#add('GutenYe/json5.vim')
+ " call dein#add('digitaltoad/vim-pug')
+ call dein#add('mattn/emmet-vim')
 
   " Required:
   call dein#end()
@@ -111,6 +114,8 @@ inoremap kk <ESC>
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
 
+noremap <C-h> <C-w>W
+noremap <C-l> <C-w>w
 noremap <S-TAB> <C-w>W
 noremap <TAB> <C-w>w
 noremap <Leader>n :browse oldfiles<CR>
@@ -121,6 +126,7 @@ noremap <Leader>Q :cprevious<CR>
 noremap <Leader>q :cnext<CR>
 noremap <Leader>L :lp<CR>
 noremap <Leader>l :lne<CR>
+noremap <Leader>z <C-w>T<CR>
 
 noremap j gj
 noremap k gk
@@ -143,6 +149,9 @@ noremap <Leader>e :Vexplore .<CR>
 noremap <Leader>p :DeniteProjectDir file_rec<CR>
 noremap <Leader>m :Denite file_mru<CR>
 
+""AutoChangeDirectory
+au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
+
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ack_qhandler = "botright copen 30"
@@ -161,16 +170,19 @@ call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 
 " ALE
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+let g:ale_set_loclist = 1
+let g:ale_set_quickfix = 0
 let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_fixers = {
 \ 'javascript': ['prettier'],
 \ 'json': ['prettier']
 \ }
-let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5 --no-semi --arrow-parens always'
-let g:ale_fix_on_save = 1
+let g:ale_javascript_prettier_options = '--single-quote --trailing-comma all --no-semi --arrow-parens always --jsx-bracket-same-line true'
+let g:ale_fix_on_save = 0
+
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
