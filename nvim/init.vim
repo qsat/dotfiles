@@ -1,17 +1,13 @@
 syntax on
 
-"set termguicolors
 set hidden
 let mapleader = "\<Space>"
-
 let loaded_matchparen = 1
 set noundofile
 set breakindent
 set backspace=indent,eol,start
 set autoread
-set nu
-set ruler
-" set cursorline
+set nonumber
 set expandtab
 set shiftwidth=2
 set hlsearch
@@ -29,9 +25,11 @@ set showmatch
 set incsearch
 set matchtime=1
 set statusline=2
-" set autochdir
+set autochdir
 set notitle
 set clipboard=unnamed
+set fileformats=unix,dos,mac
+set suffixesadd=.js,.jsx
 
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
@@ -46,7 +44,6 @@ augroup netrw
 augroup END
 
 " Use deoplete
-
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_delay = 0
 let g:deoplete#auto_complete_start_length = 1
@@ -74,21 +71,20 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('~/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
-
  call dein#add('tpope/vim-surround')
+ call dein#add('HerringtonDarkholme/yats.vim')
+ call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
  call dein#add('Shougo/deoplete.nvim')
- call dein#add('Shougo/denite.nvim')
- call dein#add('Shougo/neomru.vim')
  call dein#add('thinca/vim-qfreplace')
  call dein#add('mileszs/ack.vim')
-
  call dein#add('w0rp/ale')
  call dein#add('pangloss/vim-javascript')
  call dein#add('MaxMEllon/vim-jsx-pretty')
  call dein#add('tpope/vim-fugitive')
  call dein#add('GutenYe/json5.vim')
- " call dein#add('digitaltoad/vim-pug')
  call dein#add('mattn/emmet-vim')
+ call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+ call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
 
   " Required:
   call dein#end()
@@ -106,7 +102,6 @@ endif
 
 "End dein Scripts-------------------------
 
-nmap <Leader><Leader> V
 nmap <ESC><ESC> :nohlsearch<CR>
 inoremap jj <ESC>
 inoremap kk <ESC>
@@ -116,12 +111,6 @@ nnoremap gs :vertical wincmd f<CR>
 
 noremap <C-h> <C-w>W
 noremap <C-l> <C-w>w
-noremap <S-TAB> <C-w>W
-noremap <TAB> <C-w>w
-noremap <Leader>n :browse oldfiles<CR>
-noremap <Leader>b :b 
-noremap <Leader>, :only<CR>
-noremap <Leader>t :terminal<CR>
 noremap <Leader>Q :cprevious<CR>
 noremap <Leader>q :cnext<CR>
 noremap <Leader>L :lp<CR>
@@ -131,23 +120,24 @@ noremap <Leader>z <C-w>T<CR>
 noremap j gj
 noremap k gk
 noremap 0 g0
-noremap <Leader>[ gT
-noremap <Leader>] gt
 
 tnoremap <silent> <ESC> <C-\><C-n>
 
-" 改行コードの自動認識
-set fileformats=unix,dos,mac
+" fzf
+noremap <Leader>b :Buffers<CR>
+noremap <Leader>p :GFiles<CR>
+noremap <Leader>m :History<CR>
+noremap <Leader>h :BCommits<CR>
+noremap <Leader>e :Files<CR>
+" query, ag options, fzf#run options, fullscreen
+autocmd VimEnter *
+\ command! -bang -nargs=* Ag
+\ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
+autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
 
 " 補完候補の選択
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-" Denite
-" noremap <Leader>m :Denite file_mru directory_mru<CR>
-noremap <Leader>e :Vexplore .<CR>
-noremap <Leader>p :DeniteProjectDir file_rec<CR>
-noremap <Leader>m :Denite file_mru<CR>
 
 ""AutoChangeDirectory
 au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
@@ -155,34 +145,45 @@ au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ack_qhandler = "botright copen 30"
-
-  call denite#custom#var('file_rec', 'command', ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-  call denite#custom#var('grep', 'command', ['ag'])
-  call denite#custom#var('grep', 'recursive_opts', [])
-  call denite#custom#var('grep', 'pattern_opt', [])
-  call denite#custom#var('grep', 'default_opts', ['--follow', '--no-group', '--no-color'])
 endif
-
-call denite#custom#map('_', "<C-v>", '<denite:do_action:vsplit>')
-call denite#custom#map('insert', "jj", '<denite:enter_mode:normal>')
 
 " cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 
+autocmd BufRead,BufNewFile *.ts set filetype=typescript
+
 " ALE
 let g:ale_set_loclist = 1
 let g:ale_set_quickfix = 0
+" let g:ale_sign_column_always = 1
 let g:ale_lint_on_text_changed = 'never'
 
 let g:ale_fixers = {
-\ 'javascript': ['prettier'],
+\ 'javascript': ['eslint'],
+\ 'typescript': ['tslint'],
 \ 'json': ['prettier']
 \ }
-let g:ale_javascript_prettier_options = '--single-quote --trailing-comma all --no-semi --arrow-parens always --jsx-bracket-same-line true'
-let g:ale_fix_on_save = 0
+let g:ale_fix_on_save = 1
 
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'typescript.tsx': ['javascript-typescript-stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ }
+
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" Or map each action separately
+nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
