@@ -24,7 +24,7 @@ set display=lastline
 set showmatch
 set incsearch
 set matchtime=1
-set statusline=2
+set statusline=''
 set autochdir
 set notitle
 set clipboard=unnamed
@@ -79,6 +79,7 @@ if dein#load_state('~/.config/nvim/dein')
  call dein#add('mileszs/ack.vim')
  call dein#add('w0rp/ale')
  call dein#add('pangloss/vim-javascript')
+ call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
  call dein#add('MaxMEllon/vim-jsx-pretty')
  call dein#add('tpope/vim-fugitive')
  call dein#add('GutenYe/json5.vim')
@@ -151,16 +152,17 @@ endif
 nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 
 autocmd BufRead,BufNewFile *.ts set filetype=typescript
+autocmd BufRead,BufNewFile *.tsx set filetype=typescript
 
 " ALE
 let g:ale_set_loclist = 1
 let g:ale_set_quickfix = 0
 " let g:ale_sign_column_always = 1
 let g:ale_lint_on_text_changed = 'never'
-
+let g:ale_javascript_prettier_use_local_config = 1
 let g:ale_fixers = {
 \ 'javascript': ['eslint'],
-\ 'typescript': ['tslint'],
+\ 'typescript': ['eslint'],
 \ 'json': ['prettier']
 \ }
 let g:ale_fix_on_save = 1
@@ -191,23 +193,34 @@ if exists('&ambiwidth')
 endif
 
 " ファイル名表示
-set statusline=%F
-" 変更チェック表示
+set statusline=%f
+" " 変更チェック表示
 set statusline+=%m
-" 読み込み専用かどうか表示
+" " 読み込み専用かどうか表示
 set statusline+=%r
-" ヘルプページなら[HELP]と表示
-set statusline+=%h
-" これ以降は右寄せ表示
+" " ヘルプページなら[HELP]と表示
+" set statusline+=%h
+" " これ以降は右寄せ表示
 set statusline+=%=
-"set statusline+=[%{ALEGetStatusLine()]
-"ファイルタイプ表示
-set statusline+=%y
-" file encoding
-set statusline+=[%{&fileencoding}]
+" "set statusline+=[%{ALEGetStatusLine()]
+" "ファイルタイプ表示
+" set statusline+=%y
+" " file encoding
 " 現在行数/全行数
-set statusline+=%l/%L
+set statusline+=%c--%l/%L
+" set statusline+=[%{&fileencoding}]
 " ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
 set laststatus=2
 
 colorscheme iceberg
+
+"hi StatusLine term=NONE cterm=NONE ctermfg=238 ctermbg=234 guifg=234 guibg=234
+hi StatusLine cterm=NONE ctermfg=241 ctermbg=234 guifg=234 guibg=234
+hi StatusLineNC ctermfg=234 ctermbg=232 guifg=234 guibg=234
+hi StatusLineTerm term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
+hi StatusLineTermNC term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
+
+hi VertSplit cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
+
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
