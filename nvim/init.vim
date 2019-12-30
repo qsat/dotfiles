@@ -73,11 +73,11 @@ if dein#load_state('~/.config/nvim/dein')
   " Add or remove your plugins here:
  call dein#add('tpope/vim-surround')
  call dein#add('HerringtonDarkholme/yats.vim')
- call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
- call dein#add('Shougo/deoplete.nvim')
+ " call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
+ " call dein#add('Shougo/deoplete.nvim')
  call dein#add('thinca/vim-qfreplace')
  call dein#add('mileszs/ack.vim')
- call dein#add('w0rp/ale')
+ " call dein#add('w0rp/ale')
  call dein#add('pangloss/vim-javascript')
  call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
  call dein#add('MaxMEllon/vim-jsx-pretty')
@@ -193,7 +193,7 @@ if exists('&ambiwidth')
 endif
 
 " ファイル名表示
-set statusline=%f
+set statusline=%F
 " " 変更チェック表示
 set statusline+=%m
 " " 読み込み専用かどうか表示
@@ -215,10 +215,14 @@ set laststatus=2
 colorscheme iceberg
 
 "hi StatusLine term=NONE cterm=NONE ctermfg=238 ctermbg=234 guifg=234 guibg=234
-hi StatusLine cterm=NONE ctermfg=241 ctermbg=234 guifg=234 guibg=234
-hi StatusLineNC ctermfg=234 ctermbg=232 guifg=234 guibg=234
+hi StatusLine cterm=NONE ctermfg=251 ctermbg=234 guifg=234 guibg=234
+hi StatusLineNC ctermfg=234 ctermbg=241  guifg=234 guibg=234
 hi StatusLineTerm term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
 hi StatusLineTermNC term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
+" tab
+hi TabLineFill ctermbg=234 ctermfg=234 guibg=NONE guifg=None
+hi TabLineSel ctermbg=234 ctermfg=251 guibg=NONE guifg=None
+hi TabLine ctermbg=234 ctermfg=239 guibg=NONE guifg=None
 
 hi VertSplit cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
 
