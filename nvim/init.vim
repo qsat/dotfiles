@@ -61,19 +61,19 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('~/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
- call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
- call dein#add('tpope/vim-surround')
- call dein#add('HerringtonDarkholme/yats.vim')
- call dein#add('thinca/vim-qfreplace')
- call dein#add('mileszs/ack.vim')
- call dein#add('pangloss/vim-javascript')
- call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
- call dein#add('MaxMEllon/vim-jsx-pretty')
- call dein#add('tpope/vim-fugitive')
- call dein#add('GutenYe/json5.vim')
- call dein#add('mattn/emmet-vim')
- call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
- call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+  call dein#add('tpope/vim-surround')
+  call dein#add('HerringtonDarkholme/yats.vim')
+  call dein#add('pangloss/vim-javascript')
+  call dein#add('MaxMEllon/vim-jsx-pretty')
+  call dein#add('editorconfig/editorconfig-vim')
+  call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
+  call dein#add('mattn/emmet-vim')
+  call dein#add('thinca/vim-qfreplace')
+  call dein#add('mileszs/ack.vim')
+  call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+  call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
+  call dein#add('tpope/vim-fugitive')
 
   " Required:
   call dein#end()
@@ -94,10 +94,8 @@ endif
 nmap <ESC><ESC> :nohlsearch<CR>
 inoremap jj <ESC>
 inoremap kk <ESC>
-
 " 縦分割版gf
 nnoremap gs :vertical wincmd f<CR>
-
 noremap <C-h> <C-w>W
 noremap <C-l> <C-w>w
 noremap <Leader>Q :cprevious<CR>
@@ -105,11 +103,9 @@ noremap <Leader>q :cnext<CR>
 noremap <Leader>L :lp<CR>
 noremap <Leader>l :lne<CR>
 noremap <Leader>z <C-w>T<CR>
-
 noremap j gj
 noremap k gk
 noremap 0 g0
-
 tnoremap <silent> <ESC> <C-\><C-n>
 
 " fzf
@@ -131,49 +127,46 @@ inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 ""AutoChangeDirectory
 au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
+" cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Gcd <bar> Ack!<Space>
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
   let g:ack_qhandler = "botright copen 30"
 endif
 
-" cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Gcd <bar> Ack!<Space>
-
 autocmd BufRead,BufNewFile *.ts set filetype=typescript
-autocmd BufRead,BufNewFile *.tsx set filetype=typescript
+autocmd BufNewFile,BufRead *.tsx let b:tsx_ext_found = 1
+autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
 
-" ALE
-let g:ale_set_loclist = 1
-let g:ale_set_quickfix = 0
-" let g:ale_sign_column_always = 1
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_javascript_prettier_use_local_config = 1
-let g:ale_fixers = {
-\ 'javascript': ['eslint'],
-\ 'typescript': ['eslint'],
-\ 'json': ['prettier']
-\ }
-let g:ale_fix_on_save = 1
+" Coc
+nmap <silent> <C-k> <Plug>(coc-diagnostic-prev)
+nmap <silent> <C-j> <Plug>(coc-diagnostic-next)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
-" Required for operations modifying multiple buffers like rename.
-set hidden
-
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'typescript.tsx': ['javascript-typescript-stdio'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ }
-
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" Or map each action separately
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+" Remap for rename current word
+" nmap <leader>rn <Plug>(coc-rename)
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+" xmap <leader>oa  <Plug>(coc-codeaction-selected)
+" nmap <leader>oa  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of current line
+" nmap <leader>oc  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>of  <Plug>(coc-fix-current)
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
@@ -186,17 +179,12 @@ set statusline=%F
 set statusline+=%m
 " " 読み込み専用かどうか表示
 set statusline+=%r
-" " ヘルプページなら[HELP]と表示
-" set statusline+=%h
 " " これ以降は右寄せ表示
 set statusline+=%=
-" "set statusline+=[%{ALEGetStatusLine()]
-" "ファイルタイプ表示
-" set statusline+=%y
-" " file encoding
+"ファイルタイプ表示
+set statusline+=(%{&fenc}
 " 現在行数/全行数
-set statusline+=%c--%l/%L
-" set statusline+=[%{&fileencoding}]
+set statusline+=/%c/%l/%L)
 " ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
 set laststatus=2
 
