@@ -1,0 +1,5 @@
+{
+  "tsserver.enableJavascript": true,
+  "eslint.autoFixOnSave": true,
+  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"]
+}

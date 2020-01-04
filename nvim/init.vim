@@ -30,6 +30,7 @@ set notitle
 set clipboard=unnamed
 set fileformats=unix,dos,mac
 set suffixesadd=.js,.jsx
+set signcolumn=yes
 
 let g:netrw_banner = 0
 let g:netrw_browse_split = 4
@@ -42,17 +43,6 @@ augroup netrw
   autocmd FileType netrw map <buffer> h -
   autocmd FileType netrw map <buffer> q :bd<Return>
 augroup END
-
-" Use deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#auto_complete_delay = 0
-let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_camel_case = 0
-let g:deoplete#enable_ignore_case = 0
-let g:deoplete#enable_refresh_always = 0
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#file#enable_buffer_path = 1
-let g:deoplete#max_list = 10000
 
 "dein Scripts-----------------------------
 if &compatible
@@ -71,13 +61,11 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('~/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
+ call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
  call dein#add('tpope/vim-surround')
  call dein#add('HerringtonDarkholme/yats.vim')
- " call dein#add('autozimu/LanguageClient-neovim', {'rev': 'next', 'build': 'bash install.sh'})
- " call dein#add('Shougo/deoplete.nvim')
  call dein#add('thinca/vim-qfreplace')
  call dein#add('mileszs/ack.vim')
- " call dein#add('w0rp/ale')
  call dein#add('pangloss/vim-javascript')
  call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
  call dein#add('MaxMEllon/vim-jsx-pretty')
@@ -223,6 +211,7 @@ hi StatusLineTermNC term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg
 hi TabLineFill ctermbg=234 ctermfg=234 guibg=NONE guifg=None
 hi TabLineSel ctermbg=234 ctermfg=251 guibg=NONE guifg=None
 hi TabLine ctermbg=234 ctermfg=239 guibg=NONE guifg=None
+hi SignColumn ctermbg=234 ctermfg=239 guibg=NONE guifg=None
 
 hi VertSplit cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
 
