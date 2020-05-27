@@ -180,6 +180,26 @@ fbr() {
 zle -N fbr
 bindkey '^b' fbr
 
+function memo () {
+    vim --cmd 'cd ~/Memo' ~/Memo/`memof $1`
+}
+
+function memos () {
+    vim --cmd 'cd ~/Memo' ~/Memo/
+}
+
+function memof () {
+    echo `date +%F``echo $1 | sed 's/^\(.\)/-\1/'`.md
+}
+
+function sshdockercontainer() {
+  sudo docker ps --quiet
+  sudo docker exec -it `sudo docker ps --format "{{.Names}}" | fzf` bash
+}
+
+alias sdc=sshdockercontainer
+
+
 # @args: $branch -- target branch name when show diff
 # @depended: [git, peco, vimdiff]
 git-select() {

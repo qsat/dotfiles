@@ -1,5 +1,12 @@
 {
   "tsserver.enableJavascript": true,
   "eslint.autoFixOnSave": true,
-  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"]
+  "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"],
+  "suggest.enablePreselect": true,
+  "languageserver": {
+    "swift": {
+      "command": "/usr/local/bin/sourcekit-lsp",
+      "filetypes": ["swift"]
+    }
+  }
 }

@@ -33,7 +33,7 @@ set suffixesadd=.js,.jsx
 set signcolumn=yes
 
 let g:netrw_banner = 0
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 0
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
@@ -65,6 +65,7 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('HerringtonDarkholme/yats.vim')
   call dein#add('pangloss/vim-javascript')
   call dein#add('MaxMEllon/vim-jsx-pretty')
+  call dein#add('keith/swift.vim')
   call dein#add('editorconfig/editorconfig-vim')
   call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
   call dein#add('mattn/emmet-vim')
