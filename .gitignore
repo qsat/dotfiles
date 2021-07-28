@@ -5,3 +5,7 @@ configurestore
 direnv
 direnvrc
 nvim/.netrwhist
+nvim/.netrwbook
+anyenv/
+coc/
+lombok.jar

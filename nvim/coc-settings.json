@@ -3,6 +3,9 @@
   "eslint.autoFixOnSave": true,
   "eslint.filetypes": ["javascript", "typescript", "typescriptreact", "javascriptreact", "typescript.tsx"],
   "suggest.enablePreselect": true,
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "coc.preferences.formatOnSaveFiletypes": ["java", "json"],
   "languageserver": {
     "swift": {
       "command": "/usr/local/bin/sourcekit-lsp",

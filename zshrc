@@ -3,6 +3,7 @@ if [ $DOTFILES/.zshrc -nt ~/.zshrc.zwc ]; then
 fi
   
 alias vim=/usr/local/bin/nvim
+alias awsd='sudo docker run --rm -it -v ~/.aws:/root/.aws -v $PWD:/tmp amazon/aws-cli'
 
 alias vime='vim $(fzf)'
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
@@ -31,15 +32,7 @@ export XDG_CONFIG_HOME=~/dotfiles
 # ------------------------------------------------------------------------
 # anyenv
 # ------------------------------------------------------------------------
-if [ -d ${HOME}/.anyenv ] ; then
-    export PATH="$HOME/.anyenv/bin:$PATH"
-    eval "$(anyenv init - --no-rehash)"
-    for D in `find $HOME/.anyenv/envs -type d -d 1`
-    do
-        export PATH="$D/shims:$PATH"
-    done
-
-  fi
+eval "$(anyenv init -)"
 
 #文字コード
 export LANG=ja_JP.UTF-8
@@ -212,9 +205,6 @@ zle -N git-select
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-# export SDKMAN_DIR="/Users/01017830/.sdkman"
-# [[ -s "/Users/01017830/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/01017830/.sdkman/bin/sdkman-init.sh"
 
 # zplugin
 # $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
@@ -246,3 +236,7 @@ zplugin ice wait"!0" atinit"zpcompinit -q; zpcdreplay -q"
 zplugin light zdharma/fast-syntax-highlighting
 
 alias t=tmuximum
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/01017830/.sdkman"
+[[ -s "/Users/01017830/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/01017830/.sdkman/bin/sdkman-init.sh"
