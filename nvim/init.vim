@@ -1,8 +1,14 @@
 syntax on
 
+set encoding=utf-8
+
 set hidden
 let mapleader = "\<Space>"
 let loaded_matchparen = 1
+
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
 set noundofile
 set breakindent
 set backspace=indent,eol,start
@@ -30,7 +36,7 @@ set notitle
 set clipboard=unnamed
 set fileformats=unix,dos,mac
 set suffixesadd=.js,.jsx
-set signcolumn=yes
+set signcolumn=number
 
 let g:netrw_banner = 0
 let g:netrw_browse_split = 0
@@ -78,6 +84,7 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('mattn/emmet-vim')
 
   call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
+  call dein#add('antoinemadec/coc-fzf')
   " call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
 
   " Required:
@@ -115,8 +122,8 @@ tnoremap <silent> <ESC> <C-\><C-n>
 
 " fzf
 noremap <Leader>b :Buffers<CR>
-noremap <Leader>p :call fzf#vim#gitfiles('', {'options': '--no-preview'})<CR>
-noremap <Leader>m :call fzf#vim#history({'options': '--no-preview'})<CR>
+noremap <Leader>p :GFiles<CR>
+noremap <Leader>m :History<CR>
 noremap <Leader>c :BCommits<CR>
 noremap <Leader>e :Files<CR>
 " query, ag options, fzf#run options, fullscreen
@@ -125,6 +132,7 @@ autocmd VimEnter *
 \ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
 autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
 let g:fzf_layout = { 'down': '~40%' }
+let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
 
 " 補完候補の選択
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -150,10 +158,10 @@ nmap <silent> <C-j> <Plug>(coc-diagnostic-next)
 nmap <silent> <C-e> :CocList<CR>
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> <leader>ci <Plug>(coc-implementation)
+nmap <silent> <leader>cr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> <C-q> :call <SID>organize_import()<CR>
+nnoremap <silent> <leader>ci :call <SID>organize_import()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -172,17 +180,15 @@ function! s:organize_import()
 endfunction
 
 " Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+nmap <silent> <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-" xmap <leader>oa  <Plug>(coc-codeaction-selected)
-" nmap <leader>oa  <Plug>(coc-codeaction-selected)
-" Remap for do codeAction of current line
-nmap <leader>cc  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-" nmap <leader>of  <Plug>(coc-fix-current)
+xmap <silent> <leader>=  <Plug>(coc-format-selected)
+nmap <silent> <leader>=  <Plug>(coc-format-selected)
+nmap <silent> <leader>ca  <Plug>(coc-codeaction)
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " □とか○の文字があってもカーソル位置がずれないようにする
 if exists('&ambiwidth')
