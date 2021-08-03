@@ -165,13 +165,54 @@ bindkey '^w' cdworktree
 
 fbr() {
   local branches branch
-  branches=$(git branch -vv) &&
+  branches=$(git branch -a) &&
   branch=$(echo "$branches" | fzf +m) &&
   git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
 }
 
 zle -N fbr
 bindkey '^b' fbr
+
+function ghq-list() {
+  find $(ghq root) -type d -maxdepth 1 | grep -v DS_Store | sed -e "s#$(ghq root)/##g"
+}
+
+function new-session-with-repo() {
+  local project dir repository session current_session
+  project=$(ghq-list | fzf --prompt='Project >')
+
+  echo $project
+
+  if [[ $project == "" ]]; then
+    return 1
+  elif [[ -d ~/Projects/${project} ]]; then
+    dir=~/Projects/${project}
+  elif [[ -d ~/.go/src/${project} ]]; then
+    dir=~/.go/src/${project}
+  fi
+
+  if [[ ! -z ${TMUX} ]]; then
+    repository=${dir##*/}
+    session=${repository//./-}
+    current_session=$(tmux list-sessions | grep 'attached' | cut -d":" -f1)
+
+    if [[ $current_session =~ ^[0-9]+$ ]]; then
+      cd $dir
+      tmux rename-session $session
+    else
+      tmux list-sessions | cut -d":" -f1 | grep -e "^$session\$" > /dev/null
+      if [[ $? != 0 ]]; then
+        tmux new-session -d -c $dir -s $session
+      fi
+      tmux switch-client -t $session
+    fi
+  else
+    cd $dir
+  fi
+}
+
+zle -N new-session-with-repo
+bindkey '^A' new-session-with-repo
 
 function memo () {
     vim --cmd 'cd ~/Memo' ~/Memo/`memof $1`
@@ -228,7 +269,7 @@ zplugin light b4b4r07/gist
 zplugin ice wait'0' as"program" src"z.sh"
 zplugin light rupa/z 
 
-zplugin ice wait'0' as"program" atload'if [ -z "$TMUX" ]; then tmuximum; fi'
+zplugin ice wait'0' as"command" atload'if [ -z "$TMUX" ]; then tmuximum; fi'
 zplugin light arks22/tmuximum
 
 zplugin creinstall -q %HOME/my_completions
@@ -236,6 +277,16 @@ zplugin ice wait"!0" atinit"zpcompinit -q; zpcdreplay -q"
 zplugin light zdharma/fast-syntax-highlighting
 
 alias t=tmuximum
+
+llimelight_path=/usr/local/bin/limelight
+if [ ! -e "$limelight_path"]; then
+    git clone https://github.com/koekeishiya/limelight
+    cd limelight
+    make
+    mv ./bin/limelight /usr/local/bin/limelight
+    cd ../
+    rm -rf limelight
+fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/01017830/.sdkman"
