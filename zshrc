@@ -214,6 +214,28 @@ function new-session-with-repo() {
 zle -N new-session-with-repo
 bindkey '^A' new-session-with-repo
 
+# ctrl v file manager
+vicd()
+{
+   # from https://wiki.vifm.info/index.php?title=How_to_set_shell_working_directory_after_leaving_Vifm
+   # Syncro vifm and shell
+   local dst="$(command vifm --choose-dir - .)"
+   if [ -z "$dst" ]; then
+      echo 'Directory picking cancelled/failed'
+      return 1
+   fi
+   cd "$dst"
+}
+vifm-call() {
+if [[ -z $BUFFER ]]; then
+  # interpreted at start, not when leaving
+  BUFFER="vicd"
+  zle accept-line
+fi
+}
+zle -N vifm-call
+bindkey '^v' vifm-call
+
 function memo () {
     vim --cmd 'cd ~/Memo' ~/Memo/`memof $1`
 }
