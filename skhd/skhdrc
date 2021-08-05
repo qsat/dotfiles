@@ -81,7 +81,12 @@ ctrl + alt - l : yabai -m window --resize right:218:0
 ctrl + alt - b : yabai -m space --layout bsp
 ctrl + alt - f : yabai -m space --layout float
 
-alt - c : wid="$(yabai -m query --windows --window | jq -r '.id')" && ind="$(yabai -m query --windows --space | jq -r "sort_by(.frame.y, .frame.x) | map(.id==$wid) | index(true)")" && yabai -m query --windows --space | jq "sort_by(.frame.y, .frame.x) | .[$ind+1].id" | xargs yabai -m window --focus
+alt - c : wid="$(yabai -m query --windows --window | jq -r '.id')" \
+  && len="$(yabai -m query --windows --space | jq length)" \
+  && ind="$(yabai -m query --windows --space | jq -r "sort_by(.frame.y, .frame.x) | map(.id==$wid) | index(true)")" && \
+  yabai -m query --windows --space | \
+  jq "sort_by(.frame.y, .frame.x) | .[($ind+1)%$len].id" | \
+  xargs yabai -m window --focus
 
 alt - z: wid="$(yabai -m query --windows --window | jq -r '.id')" && ind="$(yabai -m query --windows --space | jq -r "sort_by(.frame.y, .frame.x) | map(.id==$wid) | index(true)")" && yabai -m query --windows --space | jq "sort_by(.frame.y, .frame.x) | .[$ind-1].id" | xargs yabai -m window --focus
 
