@@ -38,6 +38,8 @@ set fileformats=unix,dos,mac
 set suffixesadd=.js,.jsx
 set signcolumn=number
 
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 let g:netrw_banner = 0
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
@@ -72,6 +74,7 @@ if dein#load_state('~/.config/nvim/dein')
   " Add or remove your plugins here:
   call dein#add('nvim-treesitter/nvim-treesitter', { 'merged': 0 })
 
+  call dein#add('vifm/vifm.vim')
   call dein#add('tpope/vim-surround')
   call dein#add('editorconfig/editorconfig-vim')
   call dein#add('thinca/vim-qfreplace')
@@ -119,13 +122,16 @@ noremap j gj
 noremap k gk
 noremap 0 g0
 tnoremap <silent> <ESC> <C-\><C-n>
+" vifm
+let g:vifm_replace_netrw = 1
+let g:vifm_embed_term = 1
 
 " fzf
 noremap <Leader>b :Buffers<CR>
 noremap <Leader>p :GFiles<CR>
 noremap <Leader>m :History<CR>
 noremap <Leader>c :BCommits<CR>
-noremap <Leader>e :Files<CR>
+noremap <Leader>e :EditVifm<CR>
 " query, ag options, fzf#run options, fullscreen
 autocmd VimEnter *
 \ command! -bang -nargs=* Ag

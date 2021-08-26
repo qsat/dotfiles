@@ -113,7 +113,7 @@ eval "$(direnv hook zsh)"
 #改行のない出力をプロンプトで上書きするのを防ぐ
 unsetopt promptcr
 
-export DOCKER_HOST="localhost"
+# export DOCKER_HOST="localhost"
 
 #履歴の検索
 autoload history-search-end
@@ -214,6 +214,25 @@ function new-session-with-repo() {
 zle -N new-session-with-repo
 bindkey '^A' new-session-with-repo
 
+fzf-vifm() {
+   local res=$(z | sort -rn | cut -c 12- | fzf)
+   local dst="$(command vifm --choose-dir - $res)"
+   if [ -z "$dst" ]; then
+      echo 'Directory picking cancelled/failed'
+      return 1
+   fi
+   cd "$dst"
+}
+call-fzf-vifm() {
+if [[ -z $BUFFER ]]; then
+  # interpreted at start, not when leaving
+  BUFFER="fzf-vifm"
+  zle accept-line
+fi
+}
+zle -N call-fzf-vifm
+bindkey '^g' call-fzf-vifm
+
 # ctrl v file manager
 vicd()
 {
@@ -300,8 +319,8 @@ zplugin light zdharma/fast-syntax-highlighting
 
 alias t=tmuximum
 
-llimelight_path=/usr/local/bin/limelight
-if [ ! -e "$limelight_path"]; then
+limelight_path=/usr/local/bin/limelight
+if [ ! -e "$limelight_path" ]; then
     git clone https://github.com/koekeishiya/limelight
     cd limelight
     make
