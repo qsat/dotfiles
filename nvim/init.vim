@@ -36,7 +36,7 @@ set notitle
 set clipboard=unnamed
 set fileformats=unix,dos,mac
 set suffixesadd=.js,.jsx
-set signcolumn=number
+set signcolumn=yes:1
 
 let g:loaded_netrw = 1
 let g:loaded_netrwPlugin = 1
@@ -129,6 +129,7 @@ let g:vifm_embed_term = 1
 " fzf
 noremap <Leader>b :Buffers<CR>
 noremap <Leader>p :GFiles<CR>
+noremap <Leader>s :GFiles?<CR>
 noremap <Leader>m :History<CR>
 noremap <Leader>c :BCommits<CR>
 noremap <Leader>e :EditVifm<CR>
@@ -139,6 +140,7 @@ autocmd VimEnter *
 autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
+let g:fzf_preview_window = ['right:50%', 'ctrl-_']
 
 " 補完候補の選択
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"

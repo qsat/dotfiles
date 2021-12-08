@@ -18,7 +18,7 @@ export FZF_DEFAULT_OPTS='
 '
 
 export ANDROID_HOME=/usr/local/share/android-sdk
-export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
+export PATH=/usr/local/git/bin:$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$PATH
 #その他
 #キーバインド
 bindkey -v

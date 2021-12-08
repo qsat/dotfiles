@@ -35,7 +35,8 @@ shift + alt - tab : yabai -m window --focus "$(yabai -m query --windows --displa
 
 # alt - n : yabai -m window --warp prev
 alt - z : WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --display recent && yabai -m window --focus $WIN_ID
-alt - c : WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --space recent && yabai -m window --focus $WIN_ID
+alt - c : SID=$(yabai -m query --spaces | jq -re "reverse | nth(index(map(select(.focused == 1))) - 1).index") && WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --space $SID && yabai -m window --focus $WIN_ID
+shift + alt - c : SID=$(yabai -m query --spaces | jq -re "nth(index(map(select(.focused == 1))) - 1).index") && WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --space $SID && yabai -m window --focus $WIN_ID
 
 alt - q : yabai -m window --space 1
 alt - w : yabai -m window --space 2
