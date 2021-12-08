@@ -2,7 +2,8 @@ if [ $DOTFILES/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
 fi
   
-alias vim=/usr/local/bin/nvim
+#alias vim=/usr/local/bin/nvim
+alias vim=/opt/homebrew/bin/nvim
 alias awsd='sudo docker run --rm -it -v ~/.aws:/root/.aws -v $PWD:/tmp amazon/aws-cli'
 
 alias vime='vim $(fzf)'
@@ -268,47 +269,40 @@ zle -N git-select
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# zplug
+source ~/.zplug/init.zsh
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-# zplugin
-# $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zplugin/master/doc/install.sh)"
-source "$HOME/.zplugin/bin/zplugin.zsh"
-autoload -Uz _zplugin
-(( ${+_comps} )) && _comps[zplugin]=_zplugin
-### End of Zplugin's installer chunk
+# 非同期処理できるようになる
+zplug "mafredri/zsh-async"
+zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
+# 構文のハイライト(https://github.com/zsh-users/zsh-syntax-highlighting)
+zplug "zsh-users/zsh-syntax-highlighting"
+# コマンド入力途中で上下キー押したときの過去履歴がいい感じに出るようになる
+zplug "zsh-users/zsh-history-substring-search"
+# 過去に入力したコマンドの履歴が灰色のサジェストで出る
+zplug "zsh-users/zsh-autosuggestions"
+# 補完強化
+zplug "zsh-users/zsh-completions"
+# ディレクトリ履歴
+zplug "rupa/z", use:"*.sh"
 
-zplugin ice wait'0'
-zplugin light zsh-users/zsh-autosuggestions
+zplug "arks22/tmuximum", as:command
 
-zplugin ice pick"async.zsh" src"pure.zsh"
-zplugin light sindresorhus/pure
-
-zplugin ice from"gh-r" as"program" mv"fzf-* -> fzf"
-zplugin light junegunn/fzf-bin
-
-zplugin ice wait'0' from"gh-r" as"program"
-zplugin light b4b4r07/gist
-
-zplugin ice wait'0' as"program" src"z.sh"
-zplugin light rupa/z 
-
-zplugin ice wait'0' as"command" atload'if [ -z "$TMUX" ]; then tmuximum; fi'
-zplugin light arks22/tmuximum
-
-zplugin creinstall -q %HOME/my_completions
-zplugin ice wait"!0" atinit"zpcompinit -q; zpcdreplay -q"
-zplugin light zdharma/fast-syntax-highlighting
+# Then, source plugins and add commands to $PATH
+zplug load
 
 alias t=tmuximum
 
-llimelight_path=/usr/local/bin/limelight
-if [ ! -e "$limelight_path"]; then
-    git clone https://github.com/koekeishiya/limelight
-    cd limelight
-    make
-    mv ./bin/limelight /usr/local/bin/limelight
-    cd ../
-    rm -rf limelight
-fi
+# llimelight_path=/usr/local/bin/limelight
+# if [ ! -e "$limelight_path"]; then
+#     git clone https://github.com/koekeishiya/limelight
+#     cd limelight
+#     make
+#     mv ./bin/limelight /usr/local/bin/limelight
+#     cd ../
+#     rm -rf limelight
+# fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/01017830/.sdkman"
