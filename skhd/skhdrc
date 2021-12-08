@@ -1,5 +1,5 @@
 # focus display
-alt + ctrl - n : yabai -m space --focus next || yabai -m space --focus first
+# alt + ctrl - n : yabai -m space --focus next || yabai -m space --focus first
 alt - w : yabai -m space --balance
 
 # focus window
@@ -25,7 +25,19 @@ alt + cmd - k : yabai -m window --warp north
 alt + cmd - l : yabai -m window --warp east
 
 # move window
-alt - n : yabai -m window --warp prev
+# # cycle all windows on space backwards by coordinate
+# alt - tab : yabai -m window --focus "$( yabai -m query --windows --display | jq -re "[sort_by(.id) | .[] | select(.floating == 1) | .id] | nth(1 + index($( yabai -m query --windows --window | jq '.id')))")"
+alt - tab : yabai -m window --focus "$(yabai -m query --windows --display | jq -re "sort_by(.display, .space, .frame.x, .frame.y, .id) | map(select(.subrole != \"AXUnknown\")) | reverse | nth(index(map(select(.focused == 1))) - 1).id")"
+
+
+# cycle all windows on space backwards by coordinate
+shift + alt - tab : yabai -m window --focus "$(yabai -m query --windows --display | jq -re "sort_by(.display, .space, .frame.x, .frame.y, .id) | map(select(.subrole != \"AXUnknown\")) | nth(index(map(select(.focused == 1))) - 1).id")"
+
+# alt - n : yabai -m window --warp prev
+alt - z : WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --display recent && yabai -m window --focus $WIN_ID
+alt - c : SID=$(yabai -m query --spaces | jq -re "reverse | nth(index(map(select(.focused == 1))) - 1).index") && WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --space $SID && yabai -m window --focus $WIN_ID
+shift + alt - c : SID=$(yabai -m query --spaces | jq -re "nth(index(map(select(.focused == 1))) - 1).index") && WIN_ID=$(yabai -m query --windows --window | jq '.id') && yabai -m window --space $SID && yabai -m window --focus $WIN_ID
+
 alt - q : yabai -m window --space 1
 alt - w : yabai -m window --space 2
 
@@ -59,17 +71,17 @@ ctrl + shift - l : yabai -m window --toggle float && yabai -m window --grid 4:2:
 alt + ctrl + shift - h : yabai -m window --toggle float && yabai -m window --grid 4:3:0:0:2:4
 alt + ctrl + shift - l : yabai -m window --toggle float && yabai -m window --grid 4:3:1:0:2:4
 
-alt + ctrl + cmd - h : yabai -m window --toggle float && yabai -m window --grid 4:3:0:0:1:3
-alt + ctrl + cmd - j : yabai -m window --toggle float && yabai -m window --grid 4:3:1:0:1:3
-alt + ctrl + cmd - l : yabai -m window --toggle float && yabai -m window --grid 4:3:2:0:1:3
+alt + ctrl + cmd - h : yabai -m window --toggle float && yabai -m window --grid 5:3:0:0:1:3
+alt + ctrl + cmd - j : yabai -m window --toggle float && yabai -m window --grid 5:3:1:0:1:3
+alt + ctrl + cmd - l : yabai -m window --toggle float && yabai -m window --grid 2:3:2:0:1:1
 
 ctrl + cmd - h : yabai -m window --toggle float && yabai -m window --grid 4:3:0:0:1:4
 ctrl + cmd - j : yabai -m window --toggle float && yabai -m window --grid 4:3:1:0:1:4
 ctrl + cmd - l : yabai -m window --toggle float && yabai -m window --grid 4:3:2:0:1:4
 
-alt + ctrl + cmd - n : yabai -m window --toggle float && yabai -m window --grid 4:3:0:3:1:1
-alt + ctrl + cmd - m : yabai -m window --toggle float && yabai -m window --grid 4:3:1:3:1:1
-alt + ctrl + cmd - 0x2B : yabai -m window --toggle float && yabai -m window --grid 4:3:2:3:1:1
+alt + ctrl + cmd - n : yabai -m window --toggle float && yabai -m window --grid 5:3:0:3:1:2
+alt + ctrl + cmd - m : yabai -m window --toggle float && yabai -m window --grid 5:3:1:3:1:2
+alt + ctrl + cmd - 0x2B : yabai -m window --toggle float && yabai -m window --grid 2:3:2:1:1:1
 
 # increase window size
 ctrl + alt - h : yabai -m window --resize left:-218:0
@@ -80,14 +92,4 @@ ctrl + alt - l : yabai -m window --resize right:218:0
 # change layout of desktop
 ctrl + alt - b : yabai -m space --layout bsp
 ctrl + alt - f : yabai -m space --layout float
-
-alt - c : wid="$(yabai -m query --windows --window | jq -r '.id')" \
-  && len="$(yabai -m query --windows --space | jq length)" \
-  && ind="$(yabai -m query --windows --space | jq -r "sort_by(.frame.y, .frame.x) | map(.id==$wid) | index(true)")" && \
-  yabai -m query --windows --space | \
-  jq "sort_by(.frame.y, .frame.x) | .[($ind+1)%$len].id" | \
-  xargs yabai -m window --focus
-
-alt - z: wid="$(yabai -m query --windows --window | jq -r '.id')" && ind="$(yabai -m query --windows --space | jq -r "sort_by(.frame.y, .frame.x) | map(.id==$wid) | index(true)")" && yabai -m query --windows --space | jq "sort_by(.frame.y, .frame.x) | .[$ind-1].id" | xargs yabai -m window --focus
-
 

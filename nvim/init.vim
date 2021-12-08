@@ -36,8 +36,10 @@ set notitle
 set clipboard=unnamed
 set fileformats=unix,dos,mac
 set suffixesadd=.js,.jsx
-set signcolumn=number
+set signcolumn=yes:1
 
+let g:loaded_netrw = 1
+let g:loaded_netrwPlugin = 1
 let g:netrw_banner = 0
 let g:netrw_browse_split = 0
 let g:netrw_altv = 1
@@ -72,6 +74,7 @@ if dein#load_state('~/.config/nvim/dein')
   " Add or remove your plugins here:
   call dein#add('nvim-treesitter/nvim-treesitter', { 'merged': 0 })
 
+  call dein#add('vifm/vifm.vim')
   call dein#add('tpope/vim-surround')
   call dein#add('editorconfig/editorconfig-vim')
   call dein#add('thinca/vim-qfreplace')
@@ -119,13 +122,17 @@ noremap j gj
 noremap k gk
 noremap 0 g0
 tnoremap <silent> <ESC> <C-\><C-n>
+" vifm
+let g:vifm_replace_netrw = 1
+let g:vifm_embed_term = 1
 
 " fzf
 noremap <Leader>b :Buffers<CR>
 noremap <Leader>p :GFiles<CR>
+noremap <Leader>s :GFiles?<CR>
 noremap <Leader>m :History<CR>
 noremap <Leader>c :BCommits<CR>
-noremap <Leader>e :Files<CR>
+noremap <Leader>e :EditVifm<CR>
 " query, ag options, fzf#run options, fullscreen
 autocmd VimEnter *
 \ command! -bang -nargs=* Ag
@@ -133,6 +140,7 @@ autocmd VimEnter *
 autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
 let g:fzf_layout = { 'down': '~40%' }
 let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
+let g:fzf_preview_window = ['right:50%', 'ctrl-_']
 
 " 補完候補の選択
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
