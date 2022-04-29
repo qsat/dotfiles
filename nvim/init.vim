@@ -45,15 +45,15 @@ let g:netrw_browse_split = 0
 let g:netrw_altv = 1
 let g:netrw_winsize = 25
 
-augroup netrw
-  autocmd!
-  autocmd FileType netrw map <buffer> l <Return>
-  autocmd FileType netrw map <buffer> h -
-  autocmd FileType netrw map <buffer> q :bd<Return>
-  autocmd FileType netrw map <buffer> <C-h> <C-w>W
-  autocmd FileType netrw map <buffer> <C-l> <C-w>w
-  autocmd FileType netrw hi netrwMarkFile cterm=NONE ctermfg=140 ctermbg=234 guifg=234 guibg=234
-augroup END
+"augroup netrw
+"  autocmd!
+"  autocmd FileType netrw map <buffer> l <Return>
+"  autocmd FileType netrw map <buffer> h -
+"  autocmd FileType netrw map <buffer> q :bd<Return>
+"  autocmd FileType netrw map <buffer> <C-h> <C-w>W
+"  autocmd FileType netrw map <buffer> <C-l> <C-w>w
+"  autocmd FileType netrw hi netrwMarkFile cterm=NONE ctermfg=140 ctermbg=234 guifg=234 guibg=234
+"augroup END
 
 "dein Scripts-----------------------------
 if &compatible
@@ -72,23 +72,24 @@ if dein#load_state('~/.config/nvim/dein')
   call dein#add('~/.config/nvim/dein/repos/github.com/Shougo/dein.vim')
 
   " Add or remove your plugins here:
+
+  call dein#add('tpope/vim-surround')
   call dein#add('nvim-treesitter/nvim-treesitter', { 'merged': 0 })
 
-  call dein#add('vifm/vifm.vim')
-  call dein#add('tpope/vim-surround')
-  call dein#add('editorconfig/editorconfig-vim')
-  call dein#add('thinca/vim-qfreplace')
-  call dein#add('mileszs/ack.vim')
-
-  call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
-  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-  call dein#add('tpope/vim-fugitive')
-
-  call dein#add('mattn/emmet-vim')
-
-  call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
-  call dein#add('antoinemadec/coc-fzf')
-  " call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
+  if !exists('g:vscode')
+    call dein#add('vifm/vifm.vim')
+    call dein#add('editorconfig/editorconfig-vim')
+    call dein#add('mattn/emmet-vim')
+    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    call dein#add('tpope/vim-fugitive')
+    call dein#add('mileszs/ack.vim')
+    call dein#add('thinca/vim-qfreplace')
+    call dein#add('neoclide/coc.nvim', {'merged':0, 'rev': 'release'})
+    call dein#add('antoinemadec/coc-fzf')
+    call dein#add('christoomey/vim-tmux-navigator')
+    " call dein#add('styled-components/vim-styled-components', {'on_ft': ['javascript', 'javascript.jsx', 'typescript', 'typescript.jsx']})
+  endif
 
   " Required:
   call dein#end()
@@ -106,41 +107,52 @@ endif
 
 "End dein Scripts-------------------------
 
-nmap <ESC><ESC> :nohlsearch<CR>
-inoremap jj <ESC>
-inoremap kk <ESC>
-" 縦分割版gf
-nnoremap gs :vertical wincmd f<CR>
-noremap <C-h> <C-w>W
-noremap <C-l> <C-w>w
-noremap <Leader>Q :cprevious<CR>
-noremap <Leader>q :cnext<CR>
-noremap <Leader>L :lp<CR>
-noremap <Leader>l :lne<CR>
-noremap <Leader>z <C-w>T<CR>
-noremap j gj
-noremap k gk
-noremap 0 g0
-tnoremap <silent> <ESC> <C-\><C-n>
-" vifm
-let g:vifm_replace_netrw = 1
-let g:vifm_embed_term = 1
+if !exists('g:vscode')
+  nmap <ESC><ESC> :nohlsearch<CR>
+  inoremap jk <ESC>
+  " 縦分割版gf
+  nnoremap gs :vertical wincmd f<CR>
+  nnoremap gn <C-w>gf
+  noremap <C-h> <C-w>W
+  noremap <C-l> <C-w>w
+  noremap <Leader>Q :cprevious<CR>
+  noremap <Leader>q :cnext<CR>
+  noremap <Leader>L :lp<CR>
+  noremap <Leader>l :lne<CR>
+  noremap <Leader>z <C-w>T<CR>
+  noremap j gj
+  noremap k gk
+  noremap 0 g0
+  tnoremap <silent> <ESC> <C-\><C-n>
+  " vifm
+  let g:vifm_replace_netrw = 1
+  let g:vifm_embed_term = 1
 
-" fzf
-noremap <Leader>b :Buffers<CR>
-noremap <Leader>p :GFiles<CR>
-noremap <Leader>s :GFiles?<CR>
-noremap <Leader>m :History<CR>
-noremap <Leader>c :BCommits<CR>
-noremap <Leader>e :EditVifm<CR>
-" query, ag options, fzf#run options, fullscreen
-autocmd VimEnter *
-\ command! -bang -nargs=* Ag
-\ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
-autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
-let g:fzf_layout = { 'down': '~40%' }
-let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
-let g:fzf_preview_window = ['right:50%', 'ctrl-_']
+  " fzf
+  noremap <Leader>b :Buffers<CR>
+  noremap <Leader>p :GFiles<CR>
+  noremap <Leader>s :GFiles?<CR>
+  noremap <Leader>m :History<CR>
+  noremap <Leader>c :BCommits<CR>
+  noremap <Leader>e :EditVifm<CR>
+
+  " query, ag options, fzf#run options, fullscreen
+  autocmd VimEnter *
+  \ command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
+  autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
+  let g:fzf_layout = { 'down': '~40%' }
+  let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
+  let g:fzf_preview_window = ['right:50%', 'ctrl-_']
+
+  command! -bang ChangedFiles
+    \ call fzf#run({'source':
+    \   "git diff --name-only $(git show-branch --sha1-name $(git symbolic-ref --short refs/remotes/origin/HEAD) $(git rev-parse --abbrev-ref HEAD) | tail -1 | awk -F'[]~^[]' '{print $2}')",
+    \   'sink': 'e',
+    \   'options': '-m --prompt "GitBranchFiles>" --preview "bat --color=always  {}"',
+    \   'window': { 'width': 0.92, 'height': 0.7, 'yoffset': 1 }
+    \   }
+endif
 
 " 補完候補の選択
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -160,47 +172,96 @@ autocmd BufRead,BufNewFile *.ts set filetype=typescript
 autocmd BufNewFile,BufRead *.tsx let b:tsx_ext_found = 1
 autocmd BufNewFile,BufRead *.tsx set filetype=typescript.tsx
 
+if !exists('g:vscode')
 " Coc
-nmap <silent> <C-k> <Plug>(coc-diagnostic-prev)
-nmap <silent> <C-j> <Plug>(coc-diagnostic-next)
-nmap <silent> <C-e> :CocList<CR>
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> <leader>ci <Plug>(coc-implementation)
-nmap <silent> <leader>cr <Plug>(coc-references)
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-nnoremap <silent> <leader>ci :call <SID>organize_import()<CR>
+  nmap <silent> ck <Plug>(coc-diagnostic-prev)
+  nmap <silent> cj <Plug>(coc-diagnostic-next)
+  nmap <silent> <C-e> :CocList<CR>
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> <leader>ci <Plug>(coc-implementation)
+  nmap <silent> <leader>cr <Plug>(coc-references)
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
+  nnoremap <silent> <leader>ci :call <SID>organize_import()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
 
-function! s:organize_import()
-  if (index(['java'], &filetype) >= 0)
-    call CocAction('runCommand', 'java.action.organizeImports')
-  elseif (index(['typescript'], &filetype) >= 0)
-    call CocAction('runCommand', 'tsserver.organizeImports')
-  endif
-endfunction
+  function! s:organize_import()
+    if (index(['java'], &filetype) >= 0)
+      call CocAction('runCommand', 'java.action.organizeImports')
+    elseif (index(['typescript'], &filetype) >= 0)
+      call CocAction('runCommand', 'tsserver.organizeImports')
+    endif
+  endfunction
 
-" Remap for rename current word
-nmap <silent> <leader>rn <Plug>(coc-rename)
-" Remap for format selected region
-xmap <silent> <leader>=  <Plug>(coc-format-selected)
-nmap <silent> <leader>=  <Plug>(coc-format-selected)
-nmap <silent> <leader>ca  <Plug>(coc-codeaction)
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
+  " Remap for rename current word
+  nmap <silent> <leader>rn <Plug>(coc-rename)
+  " Remap for format selected region
+  xmap <silent> <leader>=  <Plug>(coc-format-selected)
+  nmap <silent> <leader>=  <Plug>(coc-format-selected)
+  nmap <silent> <leader>ca  <Plug>(coc-codeaction)
+  " Use CTRL-S for selections ranges.
+  " Requires 'textDocument/selectionRange' support of language server.
+  nmap <silent> <C-s> <Plug>(coc-range-select)
+  xmap <silent> <C-s> <Plug>(coc-range-select)
 
-" □とか○の文字があってもカーソル位置がずれないようにする
-if exists('&ambiwidth')
-  set ambiwidth=double
+  " □とか○の文字があってもカーソル位置がずれないようにする
+  " if exists('&ambiwidth')
+  "   set ambiwidth=double
+  " endif
+
+
+  function! StatusDiagnostic() abort
+    let info = get(b:, 'coc_diagnostic_info', {})
+    if empty(info) | return '' | endif
+    let msgs = []
+    if get(info, 'error', 0)
+      call add(msgs, '⚑ ' . info['error'])
+    endif
+    if get(info, 'warning', 0)
+      call add(msgs, '⚐ ' . info['warning'])
+    endif
+    return join(msgs, ' ') . get(g:, 'coc_status', '')
+  endfunction
+
+  " ファイル名表示
+  set statusline=%y\ %{expand('%:p:h:t')}/%t
+  " " これ以降は右寄せ表示
+  set statusline+=%=
+  set statusline+=%{StatusDiagnostic()}
+  "ファイルタイプ表示
+  set statusline+=\ %{&fenc}
+  " 現在行数/全行数
+  set statusline+=\ (%c/%l/%L)
+
+  " ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
+  set laststatus=2
+
+  colorscheme iceberg
+
+  "hi StatusLine term=NONE cterm=NONE ctermfg=238 ctermbg=234 guifg=234 guibg=234
+  hi StatusLine cterm=NONE ctermfg=251 ctermbg=234 guifg=234 guibg=234
+  hi StatusLineNC ctermfg=234 ctermbg=241  guifg=234 guibg=234
+  hi StatusLineTerm term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
+  hi StatusLineTermNC term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
+  " tab
+  hi TabLineFill ctermbg=234 ctermfg=234 guibg=NONE guifg=None
+  hi TabLineSel ctermbg=234 ctermfg=251 guibg=NONE guifg=None
+  hi TabLine ctermbg=234 ctermfg=239 guibg=NONE guifg=None
+  hi SignColumn ctermbg=234 ctermfg=239 guibg=NONE guifg=None
+
+  hi VertSplit cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
+  hi ModeMsg cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
+
+  autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
 endif
 
 " tree-sitter
@@ -215,48 +276,3 @@ require'nvim-treesitter.configs'.setup {
   }
 }
 EOF
-
-function! StatusDiagnostic() abort
-  let info = get(b:, 'coc_diagnostic_info', {})
-  if empty(info) | return '' | endif
-  let msgs = []
-  if get(info, 'error', 0)
-    call add(msgs, '⚑ ' . info['error'])
-  endif
-  if get(info, 'warning', 0)
-    call add(msgs, '⚐ ' . info['warning'])
-  endif
-  return join(msgs, ' ') . get(g:, 'coc_status', '')
-endfunction
-
-" ファイル名表示
-set statusline=%y\ %{expand('%:p:h:t')}/%t
-" " これ以降は右寄せ表示
-set statusline+=%=
-set statusline+=%{StatusDiagnostic()}
-"ファイルタイプ表示
-set statusline+=\ %{&fenc}
-" 現在行数/全行数
-set statusline+=\ (%c/%l/%L)
-
-" ステータスラインを常に表示(0:表示しない、1:2つ以上ウィンドウがある時だけ表示)
-set laststatus=2
-
-colorscheme iceberg
-
-"hi StatusLine term=NONE cterm=NONE ctermfg=238 ctermbg=234 guifg=234 guibg=234
-hi StatusLine cterm=NONE ctermfg=251 ctermbg=234 guifg=234 guibg=234
-hi StatusLineNC ctermfg=234 ctermbg=241  guifg=234 guibg=234
-hi StatusLineTerm term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
-hi StatusLineTermNC term=NONE cterm=NONE ctermfg=234 ctermbg=234 guifg=234 guibg=234
-" tab
-hi TabLineFill ctermbg=234 ctermfg=234 guibg=NONE guifg=None
-hi TabLineSel ctermbg=234 ctermfg=251 guibg=NONE guifg=None
-hi TabLine ctermbg=234 ctermfg=239 guibg=NONE guifg=None
-hi SignColumn ctermbg=234 ctermfg=239 guibg=NONE guifg=None
-
-hi VertSplit cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
-hi ModeMsg cterm=NONE ctermfg=234 ctermbg=234 guibg=234 guifg=234
-
-autocmd  FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
