@@ -140,18 +140,45 @@ if !exists('g:vscode')
   autocmd VimEnter *
   \ command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>, '', { 'options': '--bind ctrl-a:select-all,ctrl-d:deselect-all' }, <bang>0)
+
   autocmd! FileType fzf noremap <buffer> <ESC><ESC> :q<CR>
+
   let g:fzf_layout = { 'down': '~40%' }
   let g:fzf_colors = { 'border':  ['fg', 'Ignore'] }
   let g:fzf_preview_window = ['right:50%', 'ctrl-_']
 
-  command! -bang ChangedFiles
-    \ call fzf#run({'source':
-    \   "git diff --name-only $(git show-branch --sha1-name $(git symbolic-ref --short refs/remotes/origin/HEAD) $(git rev-parse --abbrev-ref HEAD) | tail -1 | awk -F'[]~^[]' '{print $2}')",
-    \   'sink': 'e',
-    \   'options': '-m --prompt "GitBranchFiles>" --preview "bat --color=always  {}"',
-    \   'window': { 'width': 0.92, 'height': 0.7, 'yoffset': 1 }
-    \   }
+  command! OpenTempfile :edit `=tempname()` <silent><CR>:read !ls
+  function Rand()
+      return str2nr(matchstr(reltimestr(reltime()), '\v\.@<=\d+')[1:])
+  endfunction
+
+  function! s:show_diff(trunk)
+    let filestr = getline(".")
+    let files = split(filestr)
+    let trunk = a:trunk
+    let dirname = files[0]
+    let filepath = files[1]
+    let tmpname = Rand()
+
+    if !filereadable(join([dirname, filepath], '/'))
+        echo "file not exists. check branch is correct."
+        return
+    endif
+
+    execute "tabedit" join([dirname, filepath], '/')
+    let filename = expand("%")
+    execute "edit" join([trunk, tmpname, filename], "__")
+    set buftype=nofile
+    let com = ['git show ', trunk, ':', filepath]
+    execute "0read" join(["!", join(com, '')], "")
+
+    set nomod
+    set ro
+    execute "vertical diffsplit" filename
+  endfunction
+
+  command! -nargs=1 Diff call <SID>show_diff(<f-args>)
+  command! -nargs=0 DD call <SID>show_diff("master")
 endif
 
 " 補完候補の選択

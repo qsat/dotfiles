@@ -12,10 +12,10 @@ yabai -m config mouse_action2                resize
 
 # general space settings
 yabai -m config layout                       float
-yabai -m config top_padding                  03
-yabai -m config bottom_padding               03
-yabai -m config left_padding                 03
-yabai -m config right_padding                03
+yabai -m config top_padding                  0
+yabai -m config bottom_padding               0
+yabai -m config left_padding                 0
+yabai -m config right_padding                0
 yabai -m config window_gap                   12 
 
 # Rules
@@ -32,5 +32,5 @@ yabai -m rule --add app=".*AnyConnect.*"       manage=off
 
 echo "yabai configuration loaded.."
 
-killall limelight &> /dev/null
-limelight -c ~/.limelightrc &> /dev/null &
+# killall limelight &> /dev/null
+# limelight -c ~/.limelightrc &> /dev/null &

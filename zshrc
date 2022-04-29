@@ -6,6 +6,9 @@ fi
 alias vim=/opt/homebrew/bin/nvim
 alias awsd='sudo docker run --rm -it -v ~/.aws:/root/.aws -v $PWD:/tmp amazon/aws-cli'
 
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
+
 alias vime='vim $(fzf)'
 alias gl="git log --graph --pretty='format:%C(yellow)%h%Creset %C(White)%cd%Creset %s %Cgreen(%an)%Creset %Cred%d%Creset' --date=iso"
 alias ctags='/usr/local/Cellar/ctags/5.8/bin/ctags'
@@ -74,39 +77,8 @@ alias lla='ls -al'
 alias less='less -qR'
 alias lesss='less -qRsS'
 
-
 #ビープ音ならなさない
 setopt nobeep
-
-
-# zplug "mafredri/zsh-async", from:github
-# zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme, lazy:true
-# zplug "junegunn/fzf-bin", \
-#     from:gh-r, \
-#     as:command, \
-#     rename-to:fzf, \
-#     use:"*darwin*amd64*", \
-#     lazy:true
-# zplug "zsh-users/zsh-syntax-highlighting", defer:2
-# zplug "zsh-users/zsh-autosuggestions"
-# zplug "rupa/z", use:z.sh
-# zplug "b4b4r07/gist", from:gh-r, as:command, use:"*darwin*amd64*", lazy:true
-
-# Install plugins if there are plugins that have not been installed
-# if ! zplug check --verbose; then
-#     printf "Install? [y/N]: "
-#     if read -q; then
-#         echo; zplug install
-#     fi
-# fi
-# Then, source plugins and add commands to $PATH
-# zplug load
-
-# if [[ -z "$TMUX" ]]
-# then
-#   tmux new-session;
-#   exit;
-# fi
 
 # direnv
 eval "$(direnv hook zsh)"
@@ -126,6 +98,37 @@ bindkey "^N" history-beginning-search-forward-end
 bindkey '^R' history-incremental-pattern-search-backward
 bindkey '^S' history-incremental-pattern-search-forward
 
+fzf-git-diff() {
+    # local branches=$(git branch -a) 
+    # local trunk=$(echo "$branches"|fzf|tr -d ' ')
+    # local trunk=$(git symbolic-ref --short refs/remotes/origin/HEAD)
+    local trunk=$1
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local res=$(git diff --name-only $(git show-branch --sha1-name $trunk $branch | tail -1 | awk -F'[]~^[]' '{print $2}')|fzf)
+    
+    if [ -n "$res" ]; then
+        # BUFFER+="git diff $trunk -- $res"
+        nvim -d <(git show $trunk:$res) $res
+    else
+        return 1
+    fi
+}
+
+alias ef=fzf-git-diff
+
+fzf-git-diff-files() {
+    local trunk=$1
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local res=$(git diff --name-only $(git show-branch --sha1-name $trunk $branch | tail -1 | awk -F'[]~^[]' '{print $2}'))
+    
+    if [ -n "$res" ]; then
+      echo $res;
+    else
+        return 1
+    fi
+}
+
+alias eff=fzf-git-diff-files
 
 fzf-z-search() {
     local res=$(z | sort -rn | cut -c 12- | fzf)
@@ -269,8 +272,8 @@ function memof () {
 }
 
 function sshdockercontainer() {
-  sudo docker ps --quiet
-  sudo docker exec -it `sudo docker ps --format "{{.Names}}" | fzf` bash
+  docker ps --quiet
+  docker exec -it `docker ps --format "{{.Names}}" | fzf` sh
 }
 
 alias sdc=sshdockercontainer
@@ -296,7 +299,7 @@ zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug "mafredri/zsh-async"
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 # 構文のハイライト(https://github.com/zsh-users/zsh-syntax-highlighting)
-zplug "zsh-users/zsh-syntax-highlighting"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 # コマンド入力途中で上下キー押したときの過去履歴がいい感じに出るようになる
 zplug "zsh-users/zsh-history-substring-search"
 # 過去に入力したコマンドの履歴が灰色のサジェストで出る
@@ -313,16 +316,16 @@ zplug load
 
 alias t=tmuximum
 
-limelight_path=/usr/local/bin/limelight
-if [ ! -e "$limelight_path" ]; then
-    git clone https://github.com/koekeishiya/limelight
-    cd limelight
-    make
-    mv ./bin/limelight /usr/local/bin/limelight
-    cd ../
-    rm -rf limelight
-fi
-
+# limelight_path=/usr/local/bin/limelight
+# if [ ! -e "$limelight_path" ]; then
+#     git clone https://github.com/koekeishiya/limelight
+#     cd limelight
+#     make
+#     sudo mv ./bin/limelight /usr/local/bin/limelight
+#     cd ../
+#     rm -rf limelight
+# fi
+# 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/01017830/.sdkman"
 [[ -s "/Users/01017830/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/01017830/.sdkman/bin/sdkman-init.sh"
