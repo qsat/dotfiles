@@ -1,6 +1,8 @@
 {
   "tsserver.enableJavascript": true,
-  "eslint.autoFixOnSave": true,
+  "eslint.autoFixOnSave": false,
+  "eslint.alwaysShowStatus": true,
+  "eslint.useESLintClass": true,
   "eslint.filetypes": [
     "javascript",
     "typescript",

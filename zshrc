@@ -1,6 +1,8 @@
 if [ $DOTFILES/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
 fi
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
   
 #alias vim=/usr/local/bin/nvim
 alias vim=/opt/homebrew/bin/nvim
@@ -291,8 +293,10 @@ zle -N git-select
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+  export ZPLUG_HOME=/opt/homebrew/opt/zplug
+  source $ZPLUG_HOME/init.zsh
 # zplug
-source ~/.zplug/init.zsh
+# source ~/.zplug/init.zsh
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # 非同期処理できるようになる

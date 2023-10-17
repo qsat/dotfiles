@@ -1,0 +1,139 @@
+{
+  "title": "トラックボール設定",
+  "rules": [
+    {
+      "description": "マウスのButton7をleft_commandに変更",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [ "any" ]
+            }
+          },
+          "to": [
+            { "key_code": "left_command" }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton6をleft_optionに変更",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button7",
+            "modifiers": {
+              "optional": [ "any" ]
+            }
+          },
+          "to": [
+            { "key_code": "left_option" 
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton7(left_command) と Button5の組み合わせでMissionControl表示",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [ "any" ],
+              "mandatory": [ "left_command" ]
+            }
+          },
+          "to": [
+            { 
+              "key_code": "vk_mission_control"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton7(left_command) と Button4の組み合わせでDesktop表示",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [ "any" ],
+              "mandatory": [ "left_command" ]
+            }
+          },
+          "to": [
+            { 
+              "key_code": "vk_mission_control",
+              "modifiers": ["left_command"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton3でmute",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button3",
+            "modifiers": {
+              "optional": [ "any" ]
+            }
+          },
+          "to": [
+            { 
+              "key_code": "mute"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton6(left_option) と Button5の組み合わせでVolumeUp",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button5",
+            "modifiers": {
+              "optional": [ "any" ],
+              "mandatory": [ "left_option" ]
+            }
+          },
+          "to": [
+            { 
+              "key_code": "volume_increment"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "マウスのButton6(left_option) と Button4の組み合わせでVolumeDown",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "pointing_button": "button4",
+            "modifiers": {
+              "optional": [ "any" ],
+              "mandatory": [ "left_option" ]
+            }
+          },
+          "to": [
+            { 
+              "key_code": "volume_decrement"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

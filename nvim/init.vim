@@ -54,6 +54,22 @@ let g:netrw_winsize = 25
 "  autocmd FileType netrw map <buffer> <C-l> <C-w>w
 "  autocmd FileType netrw hi netrwMarkFile cterm=NONE ctermfg=140 ctermbg=234 guifg=234 guibg=234
 "augroup END
+"
+let $CACHE = expand('~/.cache')
+if !isdirectory($CACHE)
+  call mkdir($CACHE, 'p')
+endif
+if &runtimepath !~# '/dein.vim'
+  let s:dein_dir = fnamemodify('dein.vim', ':p')
+  if !isdirectory(s:dein_dir)
+    let s:dein_dir = $CACHE .. '/dein/repos/github.com/Shougo/dein.vim'
+    if !isdirectory(s:dein_dir)
+      execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
+    endif
+  endif
+  execute 'set runtimepath^=' .. substitute(
+        \ fnamemodify(s:dein_dir, ':p') , '[/\\]$', '', '')
+endif
 
 "dein Scripts-----------------------------
 if &compatible
@@ -182,8 +198,21 @@ if !exists('g:vscode')
 endif
 
 " 補完候補の選択
-inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 ""AutoChangeDirectory
 au BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
