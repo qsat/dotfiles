@@ -1,3 +1,10 @@
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Gcd <bar> Ack!<Space>
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+  let g:ack_qhandler = "botright copen 30"
+endif
+
 nmap <ESC><ESC> :nohlsearch<CR>
 inoremap jk <ESC>
 " 縦分割版gf
@@ -17,12 +24,4 @@ noremap tn :tabnew<CR>
 noremap k gk
 noremap 0 g0
 tnoremap <silent> <ESC> <C-\><C-n>
-
-" cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Gcd <bar> Ack!<Space>
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-  let g:ack_qhandler = "botright copen 30"
-endif
-
 

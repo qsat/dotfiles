@@ -41,7 +41,6 @@ if !exists('g:vscode')
   set fileformats=unix,dos,mac
   set suffixesadd=.js,.jsx
 
-  runtime config/keymaps.vim.vim
   runtime config/plugins.vim
   runtime config/gitsigns.vim
   runtime config/colors.vim
@@ -51,6 +50,7 @@ if !exists('g:vscode')
   runtime config/fzf.vim
   runtime config/statusline.vim
   runtime config/treesitter.vim
+  runtime config/keymaps.vim
   " runtime config/fold.vim
   " runtime config/lsp.vim
   " runtime config/completion.vim
