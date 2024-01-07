@@ -51,6 +51,7 @@ if !exists('g:vscode')
   runtime config/fzf.vim
   runtime config/statusline.vim
   runtime config/treesitter.vim
+  " runtime config/fold.vim
   " runtime config/lsp.vim
   " runtime config/completion.vim
   " runtime config/lint.vim
