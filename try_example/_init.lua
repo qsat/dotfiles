@@ -1,0 +1,8 @@
+require('base')
+require('autocmd')
+require('options')
+require('keymaps')
+require('colors')
+require('plugins')
+require('vifm')
+require('fzf')

@@ -1,6 +1,7 @@
 {
   "tsserver.enableJavascript": true,
-  "eslint.autoFixOnSave": false,
+  "eslint.autoFixOnSave": true,
+  "eslint.format.enable": true,
   "eslint.alwaysShowStatus": true,
   "eslint.useESLintClass": true,
   "eslint.filetypes": [
@@ -14,8 +15,28 @@
   "diagnostic.virtualText": false,
   "diagnostic.virtualTextCurrentLineOnly": true,
   "coc.preferences.formatOnSaveFiletypes": [
+    "typescript",
+    "typescriptreact",
+    "javascript",
+    "javascriptreact",
     "java",
     "json"
   ],
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-11",
+      "path": "~/.sdkman/candidates/java/11.0.19-amzn/"
+    },
+    {
+      "name": "JavaSE-17",
+      "path": "~/.sdkman/candidates/java/17.0.7-amzn/",
+      "default": true
+    }
+  ],
+  "codeLens.enable": true,
+  "java.jdt.ls.vmargs": "-noverify -Xmx4G -XX:+UseG1GC -XX:+UseStringDeduplication",
+  "java.referencesCodeLens.enabled": true,
+  "java.jdt.ls.lombokSupport.enabled": true,
+  "java.trace.server": "verbose",
   "languageserver": {}
 }
