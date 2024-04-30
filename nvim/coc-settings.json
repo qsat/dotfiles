@@ -5,6 +5,7 @@
   "eslint.alwaysShowStatus": true,
   "eslint.useESLintClass": true,
   "eslint.filetypes": [
+    "pug",
     "javascript",
     "typescript",
     "typescriptreact",
@@ -14,7 +15,9 @@
   "suggest.enablePreselect": true,
   "diagnostic.virtualText": false,
   "diagnostic.virtualTextCurrentLineOnly": true,
+  "coc.source.java.fileTypes": ["java"],
   "coc.preferences.formatOnSaveFiletypes": [
+    "pug",
     "typescript",
     "typescriptreact",
     "javascript",
@@ -34,7 +37,7 @@
     }
   ],
   "codeLens.enable": true,
-  "java.jdt.ls.vmargs": "-noverify -Xmx4G -XX:+UseG1GC -XX:+UseStringDeduplication",
+  "java.jdt.ls.vmargs": "-noverify -Xms8G -Xmx16G -XX:+UseG1GC -XX:+UseStringDeduplication",
   "java.referencesCodeLens.enabled": true,
   "java.jdt.ls.lombokSupport.enabled": true,
   "java.trace.server": "verbose",

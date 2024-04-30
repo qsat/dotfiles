@@ -13,3 +13,6 @@
 [filesystem "Oracle Corporation|17.0.8|/dev/disk3s1"]
 	timestampResolution = 6000 nanoseconds
 	minRacyThreshold = 0 nanoseconds
+[filesystem "Eclipse Adoptium|17.0.10|/dev/disk3s1"]
+	timestampResolution = 3000 nanoseconds
+	minRacyThreshold = 0 nanoseconds
